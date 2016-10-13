@@ -609,4 +609,9 @@ public class calculation {
 	 }
 }
 //I just create a local repository, and I commit all my documents in it.
+
 //It's on brach B1
+
+//It's on brach B2
+
+//Merged Success
