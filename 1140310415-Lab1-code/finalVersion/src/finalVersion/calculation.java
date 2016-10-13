@@ -261,7 +261,7 @@ public class calculation {
 		 for (int i = 0; i < count.length; i++)
 		 {
 			 temp = MergeSub(count[i]);
-			 //System.out.print("temp:¡ã¡ã");System.out.println(temp);
+			 //System.out.print("temp:ï¿½ï¿½ï¿½");System.out.println(temp);
 			 if (havevar(temp)==0){
 				 sum += Integer.parseInt(temp);
 			 }else if (temp.charAt(0)=='-'){
@@ -608,3 +608,4 @@ public class calculation {
 		}
 	 }
 }
+//I just create a local repository, and I commit all my documents in it.
