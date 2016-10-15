@@ -1,6 +1,6 @@
 package finalVersion;
 import java.util.*;
-
+//git first change
 public class calculation {
 	public static int[] value = new int[200];
 	
