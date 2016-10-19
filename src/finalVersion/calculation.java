@@ -46,7 +46,7 @@ public class calculation {
 	 
 	 /**
 	  * Judge whether char a is a number.
-	  * @param a
+	  * @param a char
 	  * @return true or false
 	  */
 	 public static boolean Isnumber(char a) {
@@ -55,7 +55,7 @@ public class calculation {
 
 	 /**
 	  * Judge whether char a is a letter.
-	  * @param a
+	  * @param a char
 	  * @return true or false
 	  */
 	 public static boolean Isletter(char a) {
@@ -64,7 +64,7 @@ public class calculation {
 
 	 /**
 	  * Judge whether char a is a operative symbol.
-	  * @param a
+	  * @param a char
 	  * @return true or false
 	  */
 	 public static boolean Issymbol(char a) {
@@ -128,7 +128,7 @@ public class calculation {
 	 
 	 /**
 	  * Simplify function.
-	  * @param input
+	  * @param input string
 	  * @param fun the expresion
 	  * @return the string simplified
 	  */
@@ -188,8 +188,8 @@ public class calculation {
 	 
 	 /**
 	  * To simplify a multiplication expression.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String MergeMul(String input)
 	 {
@@ -225,8 +225,8 @@ public class calculation {
 	 
 	 /**
 	  * To judge whether a variable is in the string input.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return 0 or 1
 	  */
 	 public static int havevar(String input)
 	 {
@@ -241,8 +241,8 @@ public class calculation {
 	 
 	 /**
 	  * To simplify a subtraction expression.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String MergeSub(String input)
 	 {
@@ -286,8 +286,8 @@ public class calculation {
 	 
 	 /**
 	  * To simplify an addition expression.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String MergePlus(String input)
 	 {
@@ -345,9 +345,9 @@ public class calculation {
 	 
 	 /**
 	  * To calculate the number of variable x which shows in the String input.
-	  * @param input
-	  * @param x
-	  * @return
+	  * @param input string
+	  * @param x string
+	  * @return the number of var x
 	  */
 	 public static int havex(String input, String x)
 	 {
@@ -368,9 +368,9 @@ public class calculation {
 	 
 	 /**
 	  * Get a substring of number at the start position i in the string input.
-	  * @param input
-	  * @param i
-	  * @return
+	  * @param input string
+	  * @param i int
+	  * @return substring
 	  */
 	 public static String GetNumStr(String input, int i)
 	 {
@@ -381,9 +381,9 @@ public class calculation {
 	 
 	 /**
 	  * Diff a expression which includes subtraction.
-	  * @param input
-	  * @param x
-	  * @return
+	  * @param input string
+	  * @param x string
+	  * @return str
 	  */
 	 public static String DerivationSub(String input, String x)
 	 {
@@ -438,9 +438,9 @@ public class calculation {
 	 
 	 /**
 	  * Derivation.
-	  * @param input
-	  * @param x
-	  * @return
+	  * @param input string
+	  * @param x string
+	  * @return str
 	  */
 	 public static String Derivation(String input, String x)
 	 {
@@ -476,9 +476,9 @@ public class calculation {
 	 
 	/**
 	 * Get a substring of variable at the start position i in the string input.
-	 * @param input
-	 * @param i
-	 * @return
+	 * @param input string
+	 * @param i int
+	 * @return substring
 	 */
 	 public static String GetVarStr(String input, int i)
 	 {
@@ -489,8 +489,8 @@ public class calculation {
 	 
 	 /**
 	  * A funcition to transform '^' to '*' in the expression.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String SplitSquare(String input)
 	 {
@@ -525,8 +525,8 @@ public class calculation {
 	 
 	 /**
 	  * To merge continues '*' to '^'.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return sub
 	  */
 	 public static String MergeSquare(String input)
 	 {
@@ -583,8 +583,8 @@ public class calculation {
 	 
 	 /**
 	  * To delete the space key and tab key in the expression.
-	  * @param input
-	  * @return
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String DeleteTab(String input)
 	 {
@@ -598,9 +598,9 @@ public class calculation {
 		 return new_s;
 	 }
 	 /**
-	  * To show '*', like "3x" -> "3*x".
-	  * @param input
-	  * @return
+	  * To show '*', like "3x" to "3*x".
+	  * @param input string
+	  * @return new_s
 	  */
 	 public static String ReMul(String input)
 	 {
@@ -624,10 +624,15 @@ public class calculation {
 	 
 	 /**
 	  * The main function.
-	  * @param args
+	  * @param args string
 	  */
 	 public static void main(String args[])
 	 {
+		 try{
+			 if(true) {}
+			 System.out.println("Hello World!");
+			 } catch(Exception e) {
+			 }
 		Ini();
 		String fun = "", new_s = "";
 		while (true)
