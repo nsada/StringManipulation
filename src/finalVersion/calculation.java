@@ -1,17 +1,20 @@
 package finalVersion;
 import java.util.*;
-//git first change
+
+
 public class calculation {
-	public static int[] value = new int[200];
-	
+	private static int[] value = new int[200];
 	 //Initialize value[]
 	 public static void Ini()
 	 {
 		 for (int i = 0; i < 200; i++)
 			 value[i] = 0;
 	 }
-	 
-	 //Read one input string end with enter
+
+	 /**
+	  * read one input string end with enter.
+	  * @return input string
+	  */
  	 public static String read()
 	 {
 		 Scanner in = new Scanner(System.in);
@@ -19,48 +22,60 @@ public class calculation {
 		 return input;
 	 }
  	 
- 	 //Judge the input string
-	 public static int Judge(String input)
-	 {
-		 if (input.charAt(0) == '!') 
-		 {
-			 if (input.length() < 6)
-				 return 3;//The command is too short, so error
-			 if (input.substring(1, 4).equals("d/d"))
-				 return 1;//It is a derivation command
-			 else if (input.substring(1, 9).equals("simplify")) 
-				 return 0;//It is simplification command
-			 else
-			 {
-				 return 3;//Error
+ 	 /**
+ 	  * judge is to judge the type of input string.
+ 	  * @param input the string user typed in the console
+ 	  * @return 0 or 1 or 2 or 3
+ 	  */
+	 public static int judge(final String input) {
+		 if (input.charAt(0) == '!') {
+			 if (input.length() < 6) {
+				 return 3; //The command is too short, so error
 			 }
+			 if (input.substring(1, 4).equals("d/d")) {
+				 return 1; //It is a derivation command
+			 } else if (input.substring(1, 9).equals("simplify")) {
+				 return 0; //It is simplification command
+			 } else {
+				 return 3; //Error
+			 }
+		 } else {
+			 return 2; //Expression
 		 }
-		 else return 2;//Expression
 	 }
 	 
-	 //Whether char a is a number, if yes return true, or false
-	 public static boolean Isnumber(char a)
-	 {
-		 if (a >= '0' && a <= '9') return true;
-		 else return false;
+	 /**
+	  * Judge whether char a is a number.
+	  * @param a
+	  * @return true or false
+	  */
+	 public static boolean Isnumber(char a) {
+		 return (a >= '0' && a <= '9');
+	 }
+
+	 /**
+	  * Judge whether char a is a letter.
+	  * @param a
+	  * @return true or false
+	  */
+	 public static boolean Isletter(char a) {
+		 return ((a >= 'A' && a <= 'Z') || (a >= 'a' && a <= 'z'));
+	 }
+
+	 /**
+	  * Judge whether char a is a operative symbol.
+	  * @param a
+	  * @return true or false
+	  */
+	 public static boolean Issymbol(char a) {
+		 return (a=='+' || a=='*' || a=='-' || a=='^');
 	 }
 	 
-	//Whether char a is a letter, if yes return true, or false
-	 public static boolean Isletter(char a)
-	 {
-		 if ((a >= 'A' && a <= 'Z') || (a >= 'a' && a <= 'z')) return true;
-		 else return false;
-	 }
-	 
-	//Whether char a is a symbol, if yes return true, or false
-	 public static boolean Issymbol(char a)
-	 {
-		 if (a=='+' || a=='*' || a=='-' || a=='^')
-			 return true;
-		 else return false;
-	 }
-	 
-	 //Judge the expression is legal
+	 /**
+	  * Judge the expression is legal.
+	  * @param fun String
+	  * @return true or false
+	  */
 	 public static boolean JudgeFun(String fun)
 	 {
 		 int cnt_num = 0, cnt_letter=0, cnt_symbol=0;
@@ -111,7 +126,12 @@ public class calculation {
 		 return true;
 	 }
 	 
-	 //Simplify function
+	 /**
+	  * Simplify function.
+	  * @param input
+	  * @param fun the expresion
+	  * @return the string simplified
+	  */
 	 public static String Simplify(String input, String fun)
 	 {
 		 Ini();
@@ -166,7 +186,11 @@ public class calculation {
 		 return new_s;
 	 }
 	 
-	 //A function to simplify a multiplication expression
+	 /**
+	  * To simplify a multiplication expression.
+	  * @param input
+	  * @return
+	  */
 	 public static String MergeMul(String input)
 	 {
 		 String new_s = "";
@@ -199,7 +223,11 @@ public class calculation {
 		 return new_s;
 	 }
 	 
-	 //A function to judge whether a variable is in the string input
+	 /**
+	  * To judge whether a variable is in the string input.
+	  * @param input
+	  * @return
+	  */
 	 public static int havevar(String input)
 	 {
 		 for (int i = 0; i < input.length(); i++)
@@ -211,7 +239,11 @@ public class calculation {
 		 return 0;
 	 }
 	 
-	 //A function to simplify a subtraction expression
+	 /**
+	  * To simplify a subtraction expression.
+	  * @param input
+	  * @return
+	  */
 	 public static String MergeSub(String input)
 	 {
 		 int sum = 0;
@@ -222,6 +254,7 @@ public class calculation {
 			 if (count[i].length()==0) continue;
 			 temp = MergeMul(count[i]);
 			 temp = MergeSquare(temp);
+			 //System.out.println("MergeSub temp: "+temp);
 			 if (havevar(temp)==0){
 				 if (i!=0){
 					 sum -= Integer.parseInt(temp);
@@ -245,13 +278,17 @@ public class calculation {
 			 new_s = '+' + new_s;
 		 if (sum != 0)
 			 new_s = sum+new_s;
-		 else if (new_s.length() == 1)
+		 else if (new_s.length() == 1 && Issymbol(new_s.charAt(0)))
 			 new_s = "0";
 		 //System.out.print("MergeSub: ");System.out.println(new_s);
 		 return new_s;
 	 }
 	 
-	 //A function to simplify an addition expression 
+	 /**
+	  * To simplify an addition expression.
+	  * @param input
+	  * @return
+	  */
 	 public static String MergePlus(String input)
 	 {
 		 String[] count = input.split("\\+");
@@ -261,7 +298,7 @@ public class calculation {
 		 for (int i = 0; i < count.length; i++)
 		 {
 			 temp = MergeSub(count[i]);
-			 //System.out.print("temp:бубу");System.out.println(temp);
+			 //System.out.print("temp: ");System.out.println(temp);
 			 if (havevar(temp)==0){
 				 sum += Integer.parseInt(temp);
 			 }else if (temp.charAt(0)=='-'){
@@ -306,7 +343,12 @@ public class calculation {
 		 return new_s;
 	 }
 	 
-	 //A function to calculate the number of variable x which shows in the String input
+	 /**
+	  * To calculate the number of variable x which shows in the String input.
+	  * @param input
+	  * @param x
+	  * @return
+	  */
 	 public static int havex(String input, String x)
 	 {
 		 int cnt = 0;
@@ -324,7 +366,12 @@ public class calculation {
 		 return cnt;
 	 }
 	 
-	 //Get a substring of number at the start position i in the string input
+	 /**
+	  * Get a substring of number at the start position i in the string input.
+	  * @param input
+	  * @param i
+	  * @return
+	  */
 	 public static String GetNumStr(String input, int i)
 	 {
 		 int j = i + 1;
@@ -332,7 +379,12 @@ public class calculation {
 		 return input.substring(i,j);
 	 }
 	 
-	 //Diff a expression which includes subtraction
+	 /**
+	  * Diff a expression which includes subtraction.
+	  * @param input
+	  * @param x
+	  * @return
+	  */
 	 public static String DerivationSub(String input, String x)
 	 {
 		 if (havex(input,x)==0) return "0";
@@ -384,7 +436,12 @@ public class calculation {
 		 return str;		 
 	 }
 	 
-	 //Derivation
+	 /**
+	  * Derivation.
+	  * @param input
+	  * @param x
+	  * @return
+	  */
 	 public static String Derivation(String input, String x)
 	 {
 		 if (havex(input,x)==0) return "0";
@@ -417,7 +474,12 @@ public class calculation {
 		 return str;
 	 }
 	 
-	//Get a substring of variable at the start position i in the string input
+	/**
+	 * Get a substring of variable at the start position i in the string input.
+	 * @param input
+	 * @param i
+	 * @return
+	 */
 	 public static String GetVarStr(String input, int i)
 	 {
 		 int j = i + 1;
@@ -425,7 +487,11 @@ public class calculation {
 		 return input.substring(i,j);
 	 }
 	 
-	 //A funcition to transform '^' to '*' in the expression
+	 /**
+	  * A funcition to transform '^' to '*' in the expression.
+	  * @param input
+	  * @return
+	  */
 	 public static String SplitSquare(String input)
 	 {
 		 String new_s = "";
@@ -457,7 +523,11 @@ public class calculation {
 		 return new_s;
 	 }
 	 
-	 //A function to merge continues '*' to '^'
+	 /**
+	  * To merge continues '*' to '^'.
+	  * @param input
+	  * @return
+	  */
 	 public static String MergeSquare(String input)
 	 {
 		 String[] var = new String[100];
@@ -511,7 +581,11 @@ public class calculation {
 		 return sub;
 	 }
 	 
-	 //A function to delete the space key and tab key in the expression
+	 /**
+	  * To delete the space key and tab key in the expression.
+	  * @param input
+	  * @return
+	  */
 	 public static String DeleteTab(String input)
 	 {
 		 String new_s = "";
@@ -523,7 +597,11 @@ public class calculation {
 		 }
 		 return new_s;
 	 }
-	 //A funcition to show '*', like "3x" -> "3*x"
+	 /**
+	  * To show '*', like "3x" -> "3*x".
+	  * @param input
+	  * @return
+	  */
 	 public static String ReMul(String input)
 	 {
 		 String new_s = "";
@@ -544,7 +622,10 @@ public class calculation {
 		 return new_s;
 	 }
 	 
-	 //The main function
+	 /**
+	  * The main function.
+	  * @param args
+	  */
 	 public static void main(String args[])
 	 {
 		Ini();
@@ -559,7 +640,7 @@ public class calculation {
 			}
 			
 			//System.out.println(s);
-			int x = Judge(s);
+			int x = judge(s);
 			if (x == 2)//The input is a expression
 			{
 				s = DeleteTab(s);
@@ -580,7 +661,7 @@ public class calculation {
 					System.out.println("Error, wrong command!");
 					continue;
 				}
-				//System.out.println(new_s);
+				//System.out.println("new_s: "+new_s);
 				new_s = MergePlus(new_s);
 				System.out.println(new_s);
 			}
