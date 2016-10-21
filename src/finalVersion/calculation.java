@@ -25,7 +25,7 @@ public class calculation {
  	 /**
  	  * judge is to judge the type of input string.
  	  * @param input the string user typed in the console
- 	  * @return 0 or 1 or 2 or 3
+ 	  * @return 0 for simplify command or 1 for derivation or 2 for expression or 3 for error
  	  */
 	 public static int judge(final String input) {
 		 if (input.charAt(0) == '!') {
@@ -78,10 +78,11 @@ public class calculation {
 	  */
 	 public static boolean JudgeFun(String fun)
 	 {
-		 int cnt_num = 0, cnt_letter=0, cnt_symbol=0;
+		 int cnt_num = 0, cnt_letter=0, cnt_symbol=0; 
 		 char a = '*';
 		 if (Issymbol(fun.charAt(0)) || Issymbol(fun.charAt(fun.length()-1)))//If the first or last char is symbol, wrong
 			 return false;
+		 //XXX: what if string start with "-" symbol?
 		 for (int i = 0; i < fun.length(); i++)
 		 {
 			 a = fun.charAt(i);
@@ -90,18 +91,18 @@ public class calculation {
 				 String l = GetNumStr(fun,i);
 				 if ((i+l.length() < fun.length()) &&fun.charAt(i+l.length()) == '^')//Avoid such situation like "2^y",etc
 					 return false;
-				 i = i + l.length()-1;
-				 cnt_num = cnt_num+l.length();
+				 i = i + l.length()-1;//skip the detected number
+				 cnt_num = cnt_num+l.length();	
 				 cnt_letter=0;
 				 cnt_symbol=0;
 			 }
 			 else if (Isletter(a))
 			 {
-				 String l = GetVarStr(fun, i);
+				 String l = GetVarStr(fun, i);		//XXX: does this mean multi-character variable is supported?
 				 int len = l.length();
 				 if (i+len < fun.length() && fun.charAt(i+len) == '^')//Avoid such situation like "y^2^2",etc
 				 {
-					 if (Isnumber(fun.charAt(i+len+1)) == false)
+					 if (Isnumber(fun.charAt(i+len+1)) == false) //if power is not a number
 						 return false;
 					 else
 					 {
@@ -128,16 +129,17 @@ public class calculation {
 	 
 	 /**
 	  * Simplify function.
-	  * @param input string
-	  * @param fun the expresion
+	  * @param inputed simplification command
+	  * @param fun the expresion to simplify
 	  * @return the string simplified
 	  */
 	 public static String Simplify(String input, String fun)
 	 {
 		 Ini();
 		 String new_s = "";
-		 String[] count = input.split(" ");
+		 String[] count = input.split(" ");  //tokens of inputed command
 		 int num = count.length;
+		 //XXX: inputed command should conform rigid formality
 		 for (int i = 0; i < num; i++)
 		 {
 			 if (count[i].equals(""))
@@ -291,7 +293,7 @@ public class calculation {
 	  */
 	 public static String MergePlus(String input)
 	 {
-		 String[] count = input.split("\\+");
+		 String[] count = input.split("\\+"); 
 		 String temp = "", new_s="";
 		 int sum=0;
 		 String numstr = "";
@@ -494,6 +496,7 @@ public class calculation {
 	  */
 	 public static String SplitSquare(String input)
 	 {
+		 //XXX: i dont see that coming... is that a good practice?
 		 String new_s = "";
 		 for (int i = 0; i < input.length(); i++)
 		 {
@@ -598,7 +601,7 @@ public class calculation {
 		 return new_s;
 	 }
 	 /**
-	  * To show '*', like "3x" to "3*x".
+	  * To show '*', like "3x" to "3*x". 
 	  * @param input string
 	  * @return new_s
 	  */
@@ -607,6 +610,7 @@ public class calculation {
 		 String new_s = "";
 		 for (int i = 0; i < input.length(); i++)
 		 {
+			 //TODO: what if number after letter?
 			 if (Isnumber(input.charAt(i)))
 			 {
 				 String num = GetNumStr(input, i);
