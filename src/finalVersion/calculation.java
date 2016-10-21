@@ -2,9 +2,6 @@ package finalversion;
 
 import java.util.Scanner;
 
-//import java.util.*;
-
-
 /**
  * 
  * simplify and derivate a expression accordingly.
@@ -42,17 +39,7 @@ public final class Calculation {
 			value[i] = 0; }
 	}
 
-	/**
-	 * read one input string end with enter.
-	 * 
-	 * @return input string
-	 */
-	public static String read() {
-		final Scanner in = new Scanner(System.in);
-		final String input = in.nextLine();
-		in.close(); //fixed resource leak.
-		return input;
-	}
+
 
 	/**
 	 * judge is to judge the type of input string.
@@ -714,12 +701,20 @@ public final class Calculation {
 	 */
 	public static void main(final String[] args) {
 
+//		String strTest = null;
+//		if (strTest.equals("23")){
+//			System.out.println("kasdhfkjahsdk");
+//		}
+		
 		System.out.println("Please input an expression for operation");
-
+		
+		final Scanner inSys = new Scanner(System.in);
+		
+		
 		initValue();
 		String fun = "", newString = "";
 		while (true) {
-			String s = read();
+			String s = inSys.nextLine();
 			if (s.equals("")) { // If it is a blank string
 				System.out.println("Error, wrong input!");
 				continue;
@@ -763,5 +758,6 @@ public final class Calculation {
 				System.out.println("Error, wrong input!");
 			}
 		}
+		
 	}
 }
