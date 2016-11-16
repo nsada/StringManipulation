@@ -1,4 +1,4 @@
-package finalversion;
+package finalVersion;
 
 import java.util.Scanner;
 
@@ -7,7 +7,7 @@ import java.util.Scanner;
  * simplify and derivate a expression accordingly.
  *
  */
-public final class Calculation {
+public final class calculation {
 	/**
 	 * control the max variable count.
 	 */
@@ -24,7 +24,7 @@ public final class Calculation {
 	 * prevents instantiation
 	 */
 	
-	private Calculation() {
+	private calculation() {
 	    throw new AssertionError("Instantiating utility class...");
 
 	}
