@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>calculation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">calculationTest (2016-11-14 14:13:10)</a> &gt; <a href="../../index.html" class="el_group">finalVersion</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">finalVersion</a> &gt; <span class="el_source">calculation.java</span></div><h1>calculation.java</h1><pre class="source lang-java linenums">package finalVersion;
+
+import java.util.Scanner;
+
+/**
+ * 
+ * simplify and derivate a expression accordingly.
+ *
+ */
+public final class calculation {
+	/**
+	 * control the max variable count.
+	 */
+	private static final int MAXVARCOUNT = 200;
+	
+	/**
+	 * stores the parameters of the expression.
+	 */
+<span class="fc" id="L19">	private static int[] value = new int[MAXVARCOUNT];</span>
+
+
+	/**
+	 * default constructor.
+	 * prevents instantiation
+	 */
+	
+<span class="nc" id="L27">	private calculation() {</span>
+<span class="nc" id="L28">	    throw new AssertionError(&quot;Instantiating utility class...&quot;);</span>
+
+	}
+	/**
+	 * initialize the value array.
+	 * 
+	 * @input void
+	 */
+		
+	public static void initValue() {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">		for (int i = 0; i &lt; MAXVARCOUNT; i++) {</span>
+<span class="nc" id="L39">			value[i] = 0; }</span>
+<span class="nc" id="L40">	}</span>
+
+
+
+	/**
+	 * judge is to judge the type of input string.
+	 * 
+	 * @param input
+	 *            the string user typed in the console
+	 * @return 0 for simplify command or 1 for derivation or 2 for expression or
+	 *         3 for error
+	 */
+	public static int judge(final String input) {
+<span class="nc" id="L53">		final int 	minLength = 6;</span>
+		int 		inputType;
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if (input.charAt(0) == '!') {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if (input.length() &lt; minLength) {</span>
+<span class="nc" id="L57">				inputType = 3; // The command is too short, so error</span>
+			}
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			if (input.substring(1, 4).equals(&quot;d/d&quot;)) {</span>
+<span class="nc" id="L60">				inputType = 1; // It is a derivation command</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			} else if (input.substring(1, 9).equals(&quot;simplify&quot;)) {</span>
+<span class="nc" id="L62">				inputType = 0; // It is simplification command</span>
+<span class="nc" id="L63">			} else {</span>
+<span class="nc" id="L64">				inputType = 3; // Error</span>
+			}
+<span class="nc" id="L66">		} else {</span>
+<span class="nc" id="L67">			inputType = 2; // Expression</span>
+		}
+<span class="nc" id="L69">		return inputType;</span>
+	}
+
+	/**
+	 * Judge whether char a is a number.
+	 * 
+	 * @param scanCharacter
+	 *            char
+	 * @return true or false
+	 */
+	public static boolean isNumber(final char  scanCharacter) {
+<span class="fc bfc" id="L80" title="All 4 branches covered.">		return (scanCharacter &gt;= '0' &amp;&amp; scanCharacter &lt;= '9');</span>
+	}
+
+	/**
+	 * Judge whether char a is a letter.
+	 * 
+	 * @param a
+	 *            char
+	 * @return true or false
+	 */
+	public static boolean isLetter(final char a) {
+<span class="pc bpc" id="L91" title="2 of 8 branches missed.">		return ((a &gt;= 'A' &amp;&amp; a &lt;= 'Z') || (a &gt;= 'a' &amp;&amp; a &lt;= 'z'));</span>
+	}
+
+	/**
+	 * Judge whether char a is a operative symbol.
+	 * 
+	 * @param a
+	 *            char
+	 * @return true or false
+	 */
+	public static boolean isSymbol(final char a) {
+<span class="pc bpc" id="L102" title="1 of 8 branches missed.">		return (a == '+' || a == '*' || a == '-' || a == '^');</span>
+	}
+
+	/**
+	 * Judge the expression is legal.
+	 * 
+	 * @param fun
+	 *            String
+	 * @return true or false
+	 */
+	public static boolean judgeFun(final String fun) {
+<span class="fc" id="L113">		int cntNum = 0, cntSymbol = 0;</span>
+<span class="fc" id="L114">		char currentChar = '*';</span>
+<span class="fc" id="L115">		boolean errorDetected = false;</span>
+<span class="pc bpc" id="L116" title="2 of 6 branches missed.">		if (fun.length() &lt; 1 || isSymbol(fun.charAt(0)) || isSymbol(fun.charAt(fun.length() - 1))) {</span>
+		//symbol not allowed at the head or tail of expression
+<span class="fc" id="L118">			errorDetected = true;</span>
+<span class="fc" id="L119">		}else{</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">			for (int i = 0; i &lt; fun.length(); i++) {</span>
+<span class="fc" id="L121">				currentChar = fun.charAt(i);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">				if (isNumber(currentChar)) {</span>
+<span class="fc" id="L123">					final String l = getNumStr(fun, i);</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">					if ((i + l.length() &lt; fun.length()) </span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">							&amp;&amp; 	fun.charAt(i + l.length()) == '^') {</span>
+						// Avoid &quot;2^y&quot;,etc
+<span class="fc" id="L127">						errorDetected = true; </span>
+						}
+<span class="fc" id="L129">					i = i + l.length() - 1; // skip the detected number</span>
+<span class="fc" id="L130">					cntNum = cntNum + l.length();</span>
+<span class="fc" id="L131">					cntSymbol = 0;</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">				} else if (isLetter(currentChar)) {</span>
+<span class="fc" id="L133">					final String l = getVarStr(fun, i); </span>
+<span class="fc" id="L134">					final int len = l.length();</span>
+<span class="fc bfc" id="L135" title="All 4 branches covered.">					if (i + len &lt; fun.length() &amp;&amp; fun.charAt(i + len) == '^') {</span>
+						// Avoid situation like &quot;y^2^2&quot;,etc
+<span class="fc bfc" id="L137" title="All 2 branches covered.">						if (isNumber(fun.charAt(i + len + 1))) {</span>
+<span class="fc" id="L138">							final String ll = getNumStr(fun, i + len + 1);</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">							if ((i + len + 1 + ll.length() &lt; fun.length())</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">									&amp;&amp; (fun.charAt(i + len + 1 + ll.length()) == '^')) {</span>
+<span class="fc" id="L141">								errorDetected = true;</span>
+							}
+	
+<span class="fc" id="L144">						} else {</span>
+							// if power is not a number
+<span class="fc" id="L146">							errorDetected = true;</span>
+						}
+					}
+<span class="fc" id="L149">					i = i + len - 1;</span>
+<span class="fc" id="L150">					cntNum = 0;</span>
+<span class="fc" id="L151">					cntSymbol = 0;</span>
+<span class="fc bfc" id="L152" title="All 4 branches covered.">				} else if (cntSymbol == 0 &amp;&amp; isSymbol(currentChar)) { </span>
+					// Avoid continues symbols
+<span class="fc" id="L154">					cntSymbol++;</span>
+<span class="fc" id="L155">					cntNum = 0;</span>
+<span class="fc" id="L156">				} else {</span>
+<span class="fc" id="L157">					errorDetected = true;</span>
+				}
+			}
+		}
+		
+<span class="fc bfc" id="L162" title="All 2 branches covered.">		return !errorDetected;</span>
+	}
+
+	/**
+	 * simplify function.
+	 * 
+	 * @param input
+	 *            simplification command
+	 * @param fun
+	 *            the expression to simplify
+	 * @return the string simplified
+	 */
+	public static String simplify(final String input, final String fun) {
+<span class="nc" id="L175">		initValue();</span>
+<span class="nc" id="L176">		String newString = &quot;&quot;;</span>
+<span class="nc" id="L177">		boolean errorDetected = false;</span>
+<span class="nc" id="L178">		final String[] count = input.split(&quot; &quot;); </span>
+<span class="nc" id="L179">		final int num = count.length;</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		for (int i = 0; i &lt; num; i++) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (count[i].equals(&quot;&quot;)) {</span>
+<span class="nc" id="L182">				errorDetected = true;</span>
+<span class="nc bnc" id="L183" title="All 4 branches missed.">			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {</span>
+<span class="nc" id="L184">				errorDetected = true;</span>
+			}
+		}
+<span class="nc" id="L187">		String[] var = new String[num - 1];</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">		for (int i = 1; i &lt; num; i++) {</span>
+<span class="nc" id="L189">			var[i - 1] = getVarStr(count[i], 0);</span>
+<span class="nc" id="L190">			final int len = count[i].length();</span>
+<span class="nc" id="L191">			final String n = count[i].substring(var[i - 1].length() + 1, len);</span>
+<span class="nc" id="L192">			final int v = Integer.parseInt(n);</span>
+<span class="nc" id="L193">			value[i - 1] = v;</span>
+		}
+
+<span class="nc" id="L196">		String x = &quot;&quot;;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		for (int i = 0; i &lt; fun.length(); i++) {</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if (isLetter(fun.charAt(i))) {</span>
+<span class="nc" id="L199">				x = getVarStr(fun, i);</span>
+<span class="nc" id="L200">				boolean havevalue = false, havesquare = false;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">				for (int j = 0; j &lt; num - 1; j++) {</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">					if (x.equals(var[j])) {</span>
+<span class="nc" id="L203">						newString = newString + value[j];</span>
+<span class="nc" id="L204">						havevalue = true;</span>
+<span class="nc" id="L205">						break;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">					} else if ((i + x.length()) &lt; fun.length() </span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">							&amp;&amp; fun.charAt(i + x.length()) == '^') {</span>
+<span class="nc" id="L208">						final String l = getNumStr(fun, i + x.length() + 1);</span>
+<span class="nc" id="L209">						i = i + 1 + l.length();</span>
+<span class="nc" id="L210">						newString = newString + x + '^' + l;</span>
+<span class="nc" id="L211">						havesquare = true;</span>
+					}
+				}
+<span class="nc bnc" id="L214" title="All 4 branches missed.">				if (!havevalue &amp;&amp; !havesquare) {</span>
+<span class="nc" id="L215">					newString = newString + x;</span>
+				}
+<span class="nc" id="L217">				i = i + x.length() - 1;</span>
+<span class="nc" id="L218">			} else {</span>
+<span class="nc" id="L219">				newString = newString + fun.charAt(i);</span>
+			}
+		}
+		// System.out.println(newString);
+<span class="nc bnc" id="L223" title="All 2 branches missed.">		if (errorDetected) {</span>
+<span class="nc" id="L224">			newString = &quot;error&quot;;</span>
+		}
+<span class="nc" id="L226">		return newString;</span>
+	}
+
+	/**
+	 * To simplify a multiplication expression.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String mergeMul(final String input) {
+<span class="nc" id="L237">		String newString = &quot;&quot;;</span>
+<span class="nc" id="L238">		String sub = &quot;&quot;;</span>
+<span class="nc" id="L239">		boolean zeroTerm = false;</span>
+<span class="nc" id="L240">		int mul = 1;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">			if (isNumber(input.charAt(i))) {</span>
+<span class="nc" id="L243">				sub = getNumStr(input, i);</span>
+<span class="nc" id="L244">				final int num = Integer.parseInt(sub);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">				if (num == 0) {</span>
+<span class="nc" id="L246">					zeroTerm = true;</span>
+				}
+<span class="nc" id="L248">				mul *= num;</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">			} else if (isLetter(input.charAt(i))) {</span>
+<span class="nc" id="L250">				sub = getVarStr(input, i);</span>
+<span class="nc" id="L251">				newString = newString + '*' + sub;</span>
+<span class="nc" id="L252">			} else {</span>
+<span class="nc" id="L253">				sub = &quot;*&quot;;</span>
+			}
+<span class="nc" id="L255">			i = i + sub.length() - 1;</span>
+		}
+<span class="nc bnc" id="L257" title="All 2 branches missed.">		if (mul != 1) {</span>
+<span class="nc" id="L258">			newString = mul + newString;</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		} else if (newString.length() &lt;= 1) {</span>
+<span class="nc" id="L260">			newString = &quot;1&quot;;</span>
+<span class="nc" id="L261">		} else {</span>
+<span class="nc" id="L262">			newString = newString.substring(1, newString.length());</span>
+		}	
+<span class="nc bnc" id="L264" title="All 2 branches missed.">		if (zeroTerm) {</span>
+<span class="nc" id="L265">			newString = &quot;0&quot;;</span>
+		}
+<span class="nc" id="L267">		return newString;</span>
+	}
+
+	/**
+	 * To judge whether a variable is in the string input.
+	 * 
+	 * @param input
+	 *            string
+	 * @return 0 or 1
+	 */
+	public static int haveVar(final String input) {
+<span class="nc" id="L278">		int letterFlag = 0;</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">			if (isLetter(input.charAt(i))) {</span>
+<span class="nc" id="L281">				letterFlag = 1;</span>
+			}
+		}
+<span class="nc" id="L284">		return letterFlag;</span>
+	}
+
+	/**
+	 * To simplify a subtraction expression.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String mergeSub(final String input) {
+<span class="nc" id="L295">		int sum = 0;</span>
+<span class="nc" id="L296">		final String[] count = input.split(&quot;\\-&quot;);</span>
+<span class="nc" id="L297">		String temp = &quot;&quot;, newString = &quot;&quot;;</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">		for (int i = 0; i &lt; count.length; i++) {</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">			if (count[i].length() == 0) {</span>
+<span class="nc" id="L300">				continue;</span>
+			}
+<span class="nc" id="L302">			temp = mergeMul(count[i]);</span>
+<span class="nc" id="L303">			temp = mergeSquare(temp);</span>
+			// System.out.println(&quot;mergeSub temp: &quot;+temp);
+<span class="nc bnc" id="L305" title="All 2 branches missed.">			if (haveVar(temp) == 0) {</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">				if (i == 0) {</span>
+<span class="nc" id="L307">					sum += Integer.parseInt(temp);</span>
+<span class="nc" id="L308">				} else {</span>
+<span class="nc" id="L309">					sum -= Integer.parseInt(temp);</span>
+				}
+<span class="nc" id="L311">			} else {</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">				if (i == 0) {</span>
+<span class="nc" id="L313">					newString = temp;</span>
+<span class="nc" id="L314">				}	else {</span>
+<span class="nc" id="L315">					newString = newString + '-' + temp;</span>
+				}
+			}
+			/*
+			 * System.out.print(temp); System.out.print(' ');
+			 * System.out.println(newString);
+			 */
+		}
+<span class="nc bnc" id="L323" title="All 2 branches missed.">		if (newString.length() == 0) {</span>
+<span class="nc" id="L324">			newString = Integer.toString(sum);</span>
+<span class="nc" id="L325">		} else {</span>
+<span class="nc bnc" id="L326" title="All 4 branches missed.">			if (!isSymbol(newString.charAt(0)) &amp;&amp; sum != 0) {</span>
+<span class="nc" id="L327">				newString = '+' + newString;</span>
+			}
+<span class="nc bnc" id="L329" title="All 2 branches missed.">			if (sum != 0) {</span>
+<span class="nc" id="L330">				newString = sum + newString;</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">			} else if (newString.length() == 1 </span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">					&amp;&amp; isSymbol(newString.charAt(0))) {</span>
+<span class="nc" id="L333">				newString = &quot;0&quot;;</span>
+			}
+		}
+		// System.out.print(&quot;mergeSub: &quot;);System.out.println(newString);
+<span class="nc" id="L337">		return newString;</span>
+	}
+
+	/**
+	 * To simplify an addition expression.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String mergePlus(final String input) {
+<span class="nc" id="L348">		final String[] count = input.split(&quot;\\+&quot;);</span>
+<span class="nc" id="L349">		String temp = &quot;&quot;, newString = &quot;&quot;;</span>
+<span class="nc" id="L350">		int sum = 0;</span>
+<span class="nc" id="L351">		String numstr = &quot;&quot;;</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">		for (int i = 0; i &lt; count.length; i++) {</span>
+<span class="nc" id="L353">			temp = mergeSub(count[i]);</span>
+			// System.out.print(&quot;temp: &quot;);System.out.println(temp);
+<span class="nc bnc" id="L355" title="All 2 branches missed.">			if (haveVar(temp) == 0) {</span>
+<span class="nc" id="L356">				sum += Integer.parseInt(temp);</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">			} else if (temp.charAt(0) == '-') {</span>
+<span class="nc bnc" id="L358" title="All 2 branches missed.">				if (isNumber(temp.charAt(1))) {</span>
+<span class="nc" id="L359">					numstr = getNumStr(temp, 1);</span>
+<span class="nc" id="L360">					final int j = numstr.length() + 1;</span>
+					// System.out.println(temp.charAt(j));
+<span class="nc bnc" id="L362" title="All 2 branches missed.">					if (temp.charAt(j) == '*') {</span>
+<span class="nc" id="L363">						newString = newString + temp;</span>
+<span class="nc" id="L364">					} else {</span>
+<span class="nc" id="L365">						sum -= Integer.parseInt(numstr);</span>
+<span class="nc" id="L366">						newString = newString + temp.substring(j);</span>
+					}
+<span class="nc" id="L368">				} else {</span>
+<span class="nc" id="L369">					newString = newString + temp;</span>
+				}
+<span class="nc bnc" id="L371" title="All 2 branches missed.">			} else if (isNumber(temp.charAt(0))) {</span>
+<span class="nc" id="L372">				numstr = getNumStr(temp, 0);</span>
+<span class="nc" id="L373">				final int j = numstr.length();</span>
+<span class="nc bnc" id="L374" title="All 2 branches missed.">				if (temp.charAt(j) == '-') {</span>
+<span class="nc" id="L375">					sum += Integer.parseInt(numstr);</span>
+<span class="nc" id="L376">					newString = newString + temp.substring(j);</span>
+<span class="nc" id="L377">				} else {</span>
+<span class="nc" id="L378">					newString = newString + '+' + temp;</span>
+				}
+<span class="nc" id="L380">			} else {</span>
+<span class="nc" id="L381">				newString = newString + '+' + temp;</span>
+			}
+			// System.out.print(&quot;newString: &quot;);System.out.println(newString);
+			// System.out.print(&quot;sum: &quot;);System.out.println(sum);
+		}
+<span class="nc bnc" id="L386" title="All 2 branches missed.">		if (newString.length() == 0) {</span>
+<span class="nc" id="L387">			newString = Integer.toString(sum);</span>
+			// return newString;
+<span class="nc" id="L389">		} else {</span>
+<span class="nc bnc" id="L390" title="All 2 branches missed.">			if (sum != 0) {</span>
+<span class="nc" id="L391">				newString = sum + newString;</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">			} else if (newString.length() &lt;= 1) {</span>
+<span class="nc" id="L393">				newString = &quot;0&quot;;</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">			} else if (newString.charAt(0) != '-') {</span>
+<span class="nc" id="L395">				newString = newString.substring(1, newString.length());</span>
+			}
+		}
+		// System.out.print(&quot;mergePlus: &quot;);System.out.println(newString);
+<span class="nc" id="L399">		return newString;</span>
+	}
+
+	/**
+	 * To calculate the number of variable x which shows in the String input.
+	 * 
+	 * @param input
+	 *            string
+	 * @param x
+	 *            string
+	 * @return the number of var x
+	 */
+	public static int havex(final String input, final String x) {
+<span class="nc" id="L412">		int cnt = 0;</span>
+<span class="nc" id="L413">		String var = &quot;&quot;;</span>
+<span class="nc bnc" id="L414" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">			if (isLetter(input.charAt(i))) {</span>
+<span class="nc" id="L416">				var = getVarStr(input, i);</span>
+<span class="nc bnc" id="L417" title="All 2 branches missed.">				if (x.equals(var)) {</span>
+<span class="nc" id="L418">					cnt++;</span>
+				}
+<span class="nc" id="L420">				i = i + var.length() - 1;</span>
+			}
+		}
+<span class="nc" id="L423">		return cnt;</span>
+	}
+
+	/**
+	 * Get a substring of number at the start position i in the string input.
+	 * 
+	 * @param input
+	 *            string
+	 * @param index
+	 *            int
+	 * @return substring
+	 */
+	public static String getNumStr(final String input, final int index) {
+<span class="fc" id="L436">		int j = index + 1;</span>
+<span class="pc bpc" id="L437" title="1 of 4 branches missed.">		while (j &lt; input.length() &amp;&amp; isNumber(input.charAt(j))) {</span>
+<span class="nc" id="L438">			j++;</span>
+		}
+<span class="fc" id="L440">		return input.substring(index, j);</span>
+	}
+
+	/**
+	 * Diff a expression which includes subtraction.
+	 * 
+	 * @param input
+	 *            string
+	 * @param x
+	 *            string
+	 * @return str
+	 */
+	public static String derivationSub(final String input, final String x) {
+<span class="nc" id="L453">		String newString = &quot;&quot;, str = &quot;&quot;;</span>
+<span class="nc" id="L454">		final String[] count = input.split(&quot;\\-&quot;);</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">		if (havex(input, x) == 0) {</span>
+<span class="nc" id="L456">			str = &quot;0&quot;;</span>
+<span class="nc" id="L457">		} else {</span>
+			// int sum = 0;
+<span class="nc" id="L459">			String temp = &quot;&quot;, numstr = &quot;&quot;, sub = &quot;&quot;;</span>
+<span class="nc bnc" id="L460" title="All 2 branches missed.">			for (int i = 0; i &lt; count.length; i++) {</span>
+<span class="nc" id="L461">				int mul = 1;</span>
+<span class="nc" id="L462">				int cal = 0;</span>
+<span class="nc" id="L463">				temp = &quot;&quot;;</span>
+<span class="nc" id="L464">				numstr = &quot;1&quot;;</span>
+<span class="nc" id="L465">				newString = &quot;&quot;;</span>
+<span class="nc" id="L466">				cal = havex(count[i], x);</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">				if (cal != 0) {</span>
+<span class="nc" id="L468">					temp = mergeMul(count[i]);</span>
+<span class="nc" id="L469">					int k = 0;</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">					if (isNumber(temp.charAt(0))) {</span>
+<span class="nc" id="L471">						numstr = getNumStr(temp, 0);</span>
+<span class="nc" id="L472">						k = numstr.length();</span>
+					}
+<span class="nc bnc" id="L474" title="All 2 branches missed.">					for (int j = k; j &lt; temp.length(); j++) {</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">						if (isLetter(temp.charAt(j))) {</span>
+<span class="nc" id="L476">							sub = getVarStr(temp, j);</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">							if (!sub.equals(x)) {</span>
+<span class="nc" id="L478">								newString = newString + '*' + sub;</span>
+							}
+<span class="nc" id="L480">							j = j + sub.length() - 1;</span>
+						}
+					}
+				}
+<span class="nc" id="L484">				mul *= Integer.parseInt(numstr) * cal;</span>
+<span class="nc" id="L485">				newString = mul + newString;</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">				for (int j = 0; j &lt; cal - 1; j++) {</span>
+<span class="nc" id="L487">					newString = newString + '*' + x;</span>
+				}
+<span class="nc" id="L489">				newString = mergeSquare(newString);</span>
+<span class="nc" id="L490">				str = str + '-' + newString;</span>
+			}
+<span class="nc" id="L492">			str = str.substring(1, str.length());</span>
+<span class="nc" id="L493">			str = splitSquare(str);</span>
+<span class="nc" id="L494">			str = mergePlus(str);</span>
+		}
+<span class="nc" id="L496">		return str;</span>
+	}
+
+	/**
+	 * derivation.
+	 * 
+	 * @param input
+	 *            string
+	 * @param x
+	 *            string
+	 * @return str
+	 */
+	public static String derivation(final String input, final String x) {
+<span class="nc" id="L509">		String str = &quot;&quot;;</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">		if (havex(input, x) == 0) {</span>
+<span class="nc" id="L511">			str = &quot;0&quot;;</span>
+<span class="nc" id="L512">		} else {</span>
+
+<span class="nc" id="L514">			final String[] count = input.split(&quot;\\+&quot;);</span>
+<span class="nc" id="L515">			String temp = &quot;&quot;;</span>
+
+<span class="nc bnc" id="L517" title="All 2 branches missed.">			for (int i = 0; i &lt; count.length; i++) {</span>
+<span class="nc" id="L518">				int cal = 0;</span>
+<span class="nc" id="L519">				temp = &quot;&quot;;</span>
+<span class="nc" id="L520">				cal = havex(count[i], x);</span>
+<span class="nc bnc" id="L521" title="All 2 branches missed.">				if (cal != 0) {</span>
+<span class="nc" id="L522">					temp = derivationSub(count[i], x);</span>
+<span class="nc" id="L523">					str = str + '+' + temp;</span>
+					// System.out.print(&quot;temp: &quot;);System.out.println(temp);
+				}
+			}
+<span class="nc bnc" id="L527" title="All 2 branches missed.">			if (str.charAt(0) == '+') {</span>
+<span class="nc" id="L528">				str = str.substring(1);</span>
+			}
+			// System.out.println(str);
+<span class="nc" id="L531">			str = splitSquare(str);</span>
+			// System.out.println(str);
+<span class="nc" id="L533">			str = mergePlus(str);</span>
+		}
+<span class="nc" id="L535">		return str;</span>
+	}
+
+	/**
+	 * Get a substring of variable at the start position i in the string input.
+	 * 
+	 * @param input
+	 *            string
+	 * @param i
+	 *            int
+	 * @return substring
+	 */
+	public static String getVarStr(final String input, final int i) {
+<span class="fc" id="L548">		int j = i + 1;</span>
+<span class="fc bfc" id="L549" title="All 4 branches covered.">		while (j &lt; input.length() &amp;&amp; isLetter(input.charAt(j))) {</span>
+<span class="fc" id="L550">			j++;</span>
+		}
+<span class="fc" id="L552">		return input.substring(i, j);</span>
+	}
+
+	/**
+	 * A funcition to transform '^' to '*' in the expression.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String splitSquare(final String input) {
+		// XXX: i dont see that coming... is that a good practice?
+<span class="nc" id="L564">		String newString = &quot;&quot;;</span>
+<span class="nc bnc" id="L565" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">			if (isLetter(input.charAt(i))) {</span>
+<span class="nc" id="L567">				final String var = getVarStr(input, i);</span>
+<span class="nc" id="L568">				newString = newString + var;</span>
+<span class="nc" id="L569">				final int len = var.length();</span>
+
+<span class="nc bnc" id="L571" title="All 2 branches missed.">				if ((i + len) &lt; input.length() </span>
+<span class="nc bnc" id="L572" title="All 2 branches missed.">						&amp;&amp; input.charAt(i + len) == '^') {</span>
+<span class="nc" id="L573">					final String n = getNumStr(input, i + len + 1);</span>
+<span class="nc" id="L574">					final int num = Integer.parseInt(n);</span>
+<span class="nc bnc" id="L575" title="All 2 branches missed.">					for (int j = 0; j &lt; num - 1; j++) {</span>
+<span class="nc" id="L576">						newString = newString + '*' + var;</span>
+					}
+<span class="nc" id="L578">					i = i + len + n.length();</span>
+<span class="nc" id="L579">				} else {</span>
+<span class="nc" id="L580">					i = i + len - 1;</span>
+				}
+<span class="nc" id="L582">			} else {</span>
+<span class="nc" id="L583">				newString = newString + input.charAt(i);</span>
+			}
+		}
+
+<span class="nc" id="L587">		return newString;</span>
+	}
+
+	/**
+	 * To merge continues '*' to '^'.
+	 * 
+	 * @param input
+	 *            string
+	 * @return sub
+	 */
+	public static String mergeSquare(final String input) {
+<span class="nc" id="L598">		String[]	var = new String[MAXVARCOUNT];</span>
+<span class="nc" id="L599">		String 		sub = &quot;&quot;;</span>
+<span class="nc" id="L600">		int[] 		cntvar = new int[MAXVARCOUNT];</span>
+<span class="nc" id="L601">		int cnt = 0; // XXX: what does this mean?</span>
+<span class="nc" id="L602">		boolean havenum = false;</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">		for (int j = 0; j &lt; MAXVARCOUNT; j++) {</span>
+<span class="nc" id="L604">			cntvar[j] = 0; // XXX: obsolete initialization</span>
+		}
+
+<span class="nc bnc" id="L607" title="All 2 branches missed.">		for (int j = 0; j &lt; input.length(); j++) {</span>
+<span class="nc" id="L608">			boolean haveVar = false;</span>
+<span class="nc bnc" id="L609" title="All 2 branches missed.">			if (isNumber(input.charAt(j))) {</span>
+<span class="nc" id="L610">				final String num = getNumStr(input, j);</span>
+<span class="nc" id="L611">				sub = num + sub;</span>
+<span class="nc" id="L612">				j = j + num.length() - 1;</span>
+<span class="nc" id="L613">				havenum = true;</span>
+<span class="nc bnc" id="L614" title="All 2 branches missed.">			} else if (isLetter(input.charAt(j))) {</span>
+<span class="nc" id="L615">				final String v = getVarStr(input, j);</span>
+				// ------------------
+				// original FIXME:obsolete initialization
+				// int k = 0;
+				int k;
+				// ------------------
+<span class="nc bnc" id="L621" title="All 2 branches missed.">				for (k = 0; k &lt; cnt; k++) {</span>
+<span class="nc bnc" id="L622" title="All 2 branches missed.">					if (var[k].equals(v)) {</span>
+<span class="nc" id="L623">						haveVar = true;</span>
+<span class="nc" id="L624">						break;</span>
+					}
+					//XXX: fixed deadcode
+				}
+<span class="nc bnc" id="L628" title="All 2 branches missed.">				if (haveVar) {</span>
+<span class="nc" id="L629">					cntvar[k]++;</span>
+<span class="nc" id="L630">				} else {</span>
+<span class="nc" id="L631">					var[cnt] = v;</span>
+<span class="nc" id="L632">					cntvar[cnt]++;</span>
+<span class="nc" id="L633">					cnt++;</span>
+				}
+<span class="nc" id="L635">				j = j + v.length() - 1;</span>
+			}
+		}
+<span class="nc bnc" id="L638" title="All 2 branches missed.">		for (int j = 0; j &lt; cnt; j++) {</span>
+<span class="nc bnc" id="L639" title="All 2 branches missed.">			if (cntvar[j] &gt; 1) {</span>
+<span class="nc" id="L640">				sub = sub + '*' + var[j] + '^' + cntvar[j];</span>
+<span class="nc" id="L641">			} else {</span>
+<span class="nc" id="L642">				sub = sub + '*' + var[j];</span>
+			}
+		}
+<span class="nc bnc" id="L645" title="All 2 branches missed.">		if (!havenum) {</span>
+<span class="nc" id="L646">			sub = sub.substring(1, sub.length());</span>
+		}
+		// System.out.println(sub);
+<span class="nc" id="L649">		return sub;</span>
+	}
+
+	/**
+	 * To delete the space key and tab key in the expression.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String deleteTab(final String input) {
+<span class="nc" id="L660">		String newString = &quot;&quot;;</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc bnc" id="L662" title="All 4 branches missed.">			if (input.charAt(i) == ' ' || input.charAt(i) == '\t') {</span>
+<span class="nc" id="L663">				continue;</span>
+			}
+<span class="nc" id="L665">			newString = newString + input.charAt(i);</span>
+		}
+<span class="nc" id="L667">		return newString;</span>
+	}
+
+	/**
+	 * To show '*', like &quot;3x&quot; to &quot;3*x&quot;.
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static String reMul(final String input) {
+<span class="nc" id="L678">		String newString = &quot;&quot;;</span>
+<span class="nc bnc" id="L679" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+			// TODO: what if number after letter?
+<span class="nc bnc" id="L681" title="All 2 branches missed.">			if (isNumber(input.charAt(i))) {</span>
+<span class="nc" id="L682">				final String num = getNumStr(input, i);</span>
+<span class="nc" id="L683">				newString = newString + num;</span>
+<span class="nc" id="L684">				final int len = num.length();</span>
+<span class="nc bnc" id="L685" title="All 2 branches missed.">				if ((i + len) &lt; input.length() </span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">						&amp;&amp; isLetter(input.charAt(i + len))) {</span>
+<span class="nc" id="L687">					newString = newString + '*';</span>
+				}
+<span class="nc" id="L689">				i = i + len - 1;</span>
+<span class="nc" id="L690">			} else {</span>
+<span class="nc" id="L691">				newString = newString + input.charAt(i);</span>
+			}
+		}
+<span class="nc" id="L694">		return newString;</span>
+	}
+
+	/**
+	 * The main function.
+	 * 
+	 * @param args
+	 *            string
+	 */
+	public static void main(final String[] args) {
+
+//		String strTest = null;
+//		if (strTest.equals(&quot;23&quot;)){
+//			System.out.println(&quot;kasdhfkjahsdk&quot;);
+//		}
+		
+<span class="nc" id="L710">		System.out.println(&quot;Please input an expression for operation&quot;);</span>
+		
+<span class="nc" id="L712">		final Scanner inSys = new Scanner(System.in);</span>
+		
+		
+<span class="nc" id="L715">		initValue();</span>
+<span class="nc" id="L716">		String fun = &quot;&quot;, newString = &quot;&quot;;</span>
+<span class="nc" id="L717">		while (true) {</span>
+<span class="nc" id="L718">			String s = inSys.nextLine();</span>
+<span class="nc bnc" id="L719" title="All 2 branches missed.">			if (s.equals(&quot;&quot;)) { // If it is a blank string</span>
+<span class="nc" id="L720">				System.out.println(&quot;Error, wrong input!&quot;);</span>
+<span class="nc" id="L721">				continue;</span>
+			}
+
+			// System.out.println(s);
+<span class="nc" id="L725">			final int x = judge(s);</span>
+<span class="nc bnc" id="L726" title="All 2 branches missed.">			if (x == 2) { // The input is a expression</span>
+<span class="nc" id="L727">				s = deleteTab(s);</span>
+<span class="nc" id="L728">				s = reMul(s);</span>
+<span class="nc bnc" id="L729" title="All 2 branches missed.">				if (!judgeFun(s)) {</span>
+<span class="nc" id="L730">					System.out.println(&quot;Error, wrong expression!&quot;);</span>
+<span class="nc" id="L731">					continue;</span>
+				}
+<span class="nc" id="L733">				fun = splitSquare(s);</span>
+<span class="nc" id="L734">				System.out.println(fun);</span>
+<span class="nc bnc" id="L735" title="All 2 branches missed.">			} else if (x == 0) { // The input is a simplification command</span>
+<span class="nc" id="L736">				newString = simplify(s, fun);</span>
+<span class="nc bnc" id="L737" title="All 2 branches missed.">				if (newString.equals(&quot;error&quot;)) {</span>
+<span class="nc" id="L738">					System.out.println(&quot;Error, wrong command!&quot;);</span>
+<span class="nc" id="L739">					continue;</span>
+				}
+				// System.out.println(&quot;newString: &quot;+newString);
+<span class="nc" id="L742">				newString = mergePlus(newString);</span>
+<span class="nc" id="L743">				System.out.println(newString);</span>
+<span class="nc bnc" id="L744" title="All 2 branches missed.">			} else if (x == 1) { // The input is a diff command</span>
+<span class="nc bnc" id="L745" title="All 2 branches missed.">				if (!isLetter(s.charAt(5))) {</span>
+<span class="nc" id="L746">					System.out.println(&quot;Error, wrong command!&quot;);</span>
+<span class="nc" id="L747">					continue;</span>
+				}
+<span class="nc" id="L749">				final String variable = getVarStr(s, 5);</span>
+<span class="nc bnc" id="L750" title="All 2 branches missed.">				if (5 + variable.length() &lt; s.length()) {</span>
+<span class="nc" id="L751">					System.out.println(&quot;Error, wrong command!&quot;);</span>
+<span class="nc" id="L752">					continue;</span>
+				}
+<span class="nc" id="L754">				newString = derivation(fun, variable);</span>
+				// newString = mergeSquare(newString);
+<span class="nc" id="L756">				System.out.println(newString);</span>
+<span class="nc bnc" id="L757" title="All 2 branches missed.">			} else if (x == 3) { // Error input</span>
+			
+<span class="nc" id="L759">				System.out.println(&quot;Error, wrong input!&quot;);</span>
+			}
+		}
+		
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>calculationTest (2016-11-14 14:13:10)</div></body></html>

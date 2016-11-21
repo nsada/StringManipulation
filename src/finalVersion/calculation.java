@@ -113,48 +113,49 @@ public final class calculation {
 		int cntNum = 0, cntSymbol = 0;
 		char currentChar = '*';
 		boolean errorDetected = false;
-		if (isSymbol(fun.charAt(0)) || isSymbol(fun.charAt(fun.length() - 1))) {
+		if (fun.length() < 1 || isSymbol(fun.charAt(0)) || isSymbol(fun.charAt(fun.length() - 1))) {
 		//symbol not allowed at the head or tail of expression
 			errorDetected = true;
-		}
-		for (int i = 0; i < fun.length(); i++) {
-			currentChar = fun.charAt(i);
-			if (isNumber(currentChar)) {
-				final String l = getNumStr(fun, i);
-				if ((i + l.length() < fun.length()) 
-						&& 	fun.charAt(i + l.length()) == '^') {
-					// Avoid "2^y",etc
-					errorDetected = true; 
-					}
-				i = i + l.length() - 1; // skip the detected number
-				cntNum = cntNum + l.length();
-				cntSymbol = 0;
-			} else if (isLetter(currentChar)) {
-				final String l = getVarStr(fun, i); 
-				final int len = l.length();
-				if (i + len < fun.length() && fun.charAt(i + len) == '^') {
-					// Avoid situation like "y^2^2",etc
-					if (isNumber(fun.charAt(i + len + 1))) {
-						final String ll = getNumStr(fun, i + len + 1);
-						if ((i + len + 1 + ll.length() < fun.length())
-								&& (fun.charAt(i + len + 1 + ll.length()) == '^')) {
+		}else{
+			for (int i = 0; i < fun.length(); i++) {
+				currentChar = fun.charAt(i);
+				if (isNumber(currentChar)) {
+					final String l = getNumStr(fun, i);
+					if ((i + l.length() < fun.length()) 
+							&& 	fun.charAt(i + l.length()) == '^') {
+						// Avoid "2^y",etc
+						errorDetected = true; 
+						}
+					i = i + l.length() - 1; // skip the detected number
+					cntNum = cntNum + l.length();
+					cntSymbol = 0;
+				} else if (isLetter(currentChar)) {
+					final String l = getVarStr(fun, i); 
+					final int len = l.length();
+					if (i + len < fun.length() && fun.charAt(i + len) == '^') {
+						// Avoid situation like "y^2^2",etc
+						if (isNumber(fun.charAt(i + len + 1))) {
+							final String ll = getNumStr(fun, i + len + 1);
+							if ((i + len + 1 + ll.length() < fun.length())
+									&& (fun.charAt(i + len + 1 + ll.length()) == '^')) {
+								errorDetected = true;
+							}
+	
+						} else {
+							// if power is not a number
 							errorDetected = true;
 						}
-
-					} else {
-						// if power is not a number
-						errorDetected = true;
 					}
+					i = i + len - 1;
+					cntNum = 0;
+					cntSymbol = 0;
+				} else if (cntSymbol == 0 && isSymbol(currentChar)) { 
+					// Avoid continues symbols
+					cntSymbol++;
+					cntNum = 0;
+				} else {
+					errorDetected = true;
 				}
-				i = i + len - 1;
-				cntNum = 0;
-				cntSymbol = 0;
-			} else if (cntSymbol == 0 && isSymbol(currentChar)) { 
-				// Avoid continues symbols
-				cntSymbol++;
-				cntNum = 0;
-			} else {
-				errorDetected = true;
 			}
 		}
 		

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>calculationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">calculationTest (2016-11-14 14:13:10)</a> &gt; <a href="../../index.html" class="el_group">finalVersion</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">finalVersion</a> &gt; <span class="el_source">calculationTest.java</span></div><h1>calculationTest.java</h1><pre class="source lang-java linenums">package finalVersion;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+<span class="fc" id="L7">public class calculationTest {</span>
+
+	@Test
+	public void testJudgeFun() {		
+<span class="fc" id="L11">		assertEquals(true,calculation.judgeFun(&quot;x+yy^2*7+x*x&quot;));</span>
+<span class="fc" id="L12">		assertEquals(false,calculation.judgeFun(&quot;x+yy^x^2*7+x*x&quot;));</span>
+<span class="fc" id="L13">		assertEquals(false,calculation.judgeFun(&quot;x+yy^2^3*7+x*x&quot;));</span>
+<span class="fc" id="L14">		assertEquals(false,calculation.judgeFun(&quot;&quot;));</span>
+<span class="fc" id="L15">		assertEquals(false,calculation.judgeFun(&quot;x+yy^2*7+x*x#&quot;));</span>
+<span class="fc" id="L16">		assertEquals(false,calculation.judgeFun(&quot;x+yy^2*7+)x*x&quot;));</span>
+<span class="fc" id="L17">		assertEquals(true,calculation.judgeFun(&quot;x+yyy&quot;));</span>
+<span class="fc" id="L18">		assertEquals(true,calculation.judgeFun(&quot;x+yy^2*7&quot;));</span>
+<span class="fc" id="L19">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>calculationTest (2016-11-14 14:13:10)</div></body></html>
