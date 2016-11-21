@@ -752,7 +752,8 @@ public final class calculation {
 					continue;
 				}
 				// System.out.println("newString: "+newString);
-				newString = mergePlus(newString);
+				newString = mergePlus(newString); 
+				
 				System.out.println(newString);
 			} else if (x == 1) { // The input is a diff command
 				if (!isLetter(s.charAt(5))) {
