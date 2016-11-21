@@ -178,50 +178,64 @@ public final class calculation {
 		final int num = count.length;
 		for (int i = 0; i < num; i++) {
 			if (count[i].equals("")) {
-				errorDetected = true;
+				errorDetected = true; break;
 			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {
-				errorDetected = true;
+				errorDetected = true; break;
+			} else if (isLetter(count[i].charAt(0))) {
+				String var = getVarStr(count[i], 0);
+				if (var.length() == count[i].length()) {
+					errorDetected =true; break;
+				} else if (isNumber(count[i].charAt(var.length()+1))) {
+					String number = getNumStr(count[i], var.length()+1);
+					if (count[i].length() != var.length() + number.length() + 1) {
+						errorDetected = true; break;
+					}
+				} else if (count[i].charAt(var.length()+1) == '-') {
+					errorDetected = true; break;
+				}
 			}
 		}
-		String[] var = new String[num - 1];
-		for (int i = 1; i < num; i++) {
-			var[i - 1] = getVarStr(count[i], 0);
-			final int len = count[i].length();
-			final String n = count[i].substring(var[i - 1].length() + 1, len);
-			final int v = Integer.parseInt(n);
-			value[i - 1] = v;
-		}
-
-		String x = "";
-		for (int i = 0; i < fun.length(); i++) {
-			if (isLetter(fun.charAt(i))) {
-				x = getVarStr(fun, i);
-				boolean havevalue = false, havesquare = false;
-				for (int j = 0; j < num - 1; j++) {
-					if (x.equals(var[j])) {
-						newString = newString + value[j];
-						havevalue = true;
-						break;
-					} else if ((i + x.length()) < fun.length() 
-							&& fun.charAt(i + x.length()) == '^') {
-						final String l = getNumStr(fun, i + x.length() + 1);
-						i = i + 1 + l.length();
-						newString = newString + x + '^' + l;
-						havesquare = true;
+		if (errorDetected) {
+			newString = "error";
+		} else {
+			String[] var = new String[num - 1];
+			for (int i = 1; i < num; i++) {
+				var[i - 1] = getVarStr(count[i], 0);
+				final int len = count[i].length();
+				final String n = count[i].substring(var[i - 1].length() + 1, len);
+				final int v = Integer.parseInt(n);
+				value[i - 1] = v;
+			}
+	
+			String x = "";
+			for (int i = 0; i < fun.length(); i++) {
+				if (isLetter(fun.charAt(i))) {
+					x = getVarStr(fun, i);
+					boolean havevalue = false, havesquare = false;
+					for (int j = 0; j < num - 1; j++) {
+						if (x.equals(var[j])) {
+							newString = newString + value[j];
+							havevalue = true;
+							break;
+						} else if ((i + x.length()) < fun.length() 
+								&& fun.charAt(i + x.length()) == '^') {
+							final String l = getNumStr(fun, i + x.length() + 1);
+							i = i + 1 + l.length();
+							newString = newString + x + '^' + l;
+							havesquare = true;
+						}
 					}
+					if (!havevalue && !havesquare) {
+						newString = newString + x;
+					}
+					i = i + x.length() - 1;
+				} else {
+					newString = newString + fun.charAt(i);
 				}
-				if (!havevalue && !havesquare) {
-					newString = newString + x;
-				}
-				i = i + x.length() - 1;
-			} else {
-				newString = newString + fun.charAt(i);
 			}
 		}
 		// System.out.println(newString);
-		if (errorDetected) {
-			newString = "error";
-		}
+		
 		return newString;
 	}
 
