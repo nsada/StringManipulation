@@ -17,7 +17,4 @@ public class Answer {
 		return this.answer;
 	}
 	
-	public void mergeAnswer(String answer) {
-		
-	}
 }

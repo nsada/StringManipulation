@@ -13,43 +13,27 @@ public class Expression {
 	public Expression() {
 		exp = "";
 	}
+	
 	public Expression(String exp) {
 		this.exp = exp;
 		deleteTab();
 		reMul();
 	}
-	
-	public void deleteTab() {
-		String newString = "";
-		for (int i = 0; i < exp.length(); i++) {
-			if (exp.charAt(i) == ' ' || exp.charAt(i) == '\t') {
-				continue;
-			}
-			newString = newString + exp.charAt(i);
-		}
-		exp = newString;
-	}
-	
-	public static void reMul() {
-		String newString = "";
-		OperateString ops = new OperateString();
-		for (int i = 0; i < exp.length(); i++) {
-			if (ops.isNumber(exp.charAt(i))) {
-				final String num = ops.getNumStr(exp, i);
-				newString = newString + num;
-				final int len = num.length();
-				if ((i + len) < exp.length() 
-						&& ops.isLetter(exp.charAt(i + len))) {
-					newString = newString + '*';
-				}
-				i = i + len - 1;
-			} else {
-				newString = newString + exp.charAt(i);
-			}
-		}
-		exp = newString;
-	}
 
+	/**
+	 * @return the exp
+	 */
+	public static String getExp() {
+		return exp;
+	}
+	
+	/**
+	 * @param exp the exp to set
+	 */
+	public static void setExp(String exp) {
+		Expression.exp = exp;
+	}
+	
 	public static boolean judge() {
 		String expression = exp;
 		int cntNum = 0, cntSymbol = 0;
@@ -160,21 +144,40 @@ public class Expression {
 		exp = newString;
 	}
 	
-	
-	/**
-	 * @return the exp
-	 */
-	public static String getExp() {
-		return exp;
-	}
-	/**
-	 * @param exp the exp to set
-	 */
-	public static void setExp(String exp) {
-		Expression.exp = exp;
-	}
 	public void splitSquare() {
 		OperateString ops = new OperateString();
 		exp = ops.splitSquare(exp);
 	}
+	
+	public void deleteTab() {
+		String newString = "";
+		for (int i = 0; i < exp.length(); i++) {
+			if (exp.charAt(i) == ' ' || exp.charAt(i) == '\t') {
+				continue;
+			}
+			newString = newString + exp.charAt(i);
+		}
+		exp = newString;
+	}
+	
+	public static void reMul() {
+		String newString = "";
+		OperateString ops = new OperateString();
+		for (int i = 0; i < exp.length(); i++) {
+			if (ops.isNumber(exp.charAt(i))) {
+				final String num = ops.getNumStr(exp, i);
+				newString = newString + num;
+				final int len = num.length();
+				if ((i + len) < exp.length() 
+						&& ops.isLetter(exp.charAt(i + len))) {
+					newString = newString + '*';
+				}
+				i = i + len - 1;
+			} else {
+				newString = newString + exp.charAt(i);
+			}
+		}
+		exp = newString;
+	}
+
 }

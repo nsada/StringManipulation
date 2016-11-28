@@ -8,37 +8,25 @@ package Control;
 //
 //
 
+import Entity.Command;
 import Entity.OperateString;
 
 public class JudgeCommand {
-	private String command;
-	public JudgeCommand(String command) {
-		this.command = command;
-	}
-	public boolean judgeCommand() {
-		OperateString ops = new OperateString();
-		boolean errorDetected = false;
-		final String[] count = command.split(" "); 
-		final int num = count.length;
-		for (int i = 0; i < num; i++) {
-			if (count[i].equals("")) {
-				errorDetected = true; break;
-			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {
-				errorDetected = true; break;
-			} else if (ops.isLetter(count[i].charAt(0))) {
-				String var = ops.getVarStr(count[i], 0);
-				if (var.length() == count[i].length()) {
-					errorDetected =true; break;
-				} else if (ops.isNumber(count[i].charAt(var.length()+1))) {
-					String number = ops.getNumStr(count[i], var.length()+1);
-					if (count[i].length() != var.length() + number.length() + 1) {
-						errorDetected = true; break;
-					}
-				} else if (count[i].charAt(var.length()+1) == '-') {
-					errorDetected = true; break;
-				}
-			}
+	
+	public boolean judgeLegal(String input) {
+		Command com = new Command();
+		boolean flag = false;
+		
+		JudgeInput ji = new JudgeInput();
+		int type = ji.judgeInput(input);
+		
+		if (type == 1) {
+			com.setCommand(input);
+			flag = com.judgeDerivate();
+		} else if (type == 2) {
+			com.setCommand(input);
+			flag = com.judgeSimplify();
 		}
-		return errorDetected;
+		return flag;
 	}
 }

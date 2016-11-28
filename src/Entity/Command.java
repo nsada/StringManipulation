@@ -14,6 +14,12 @@ public class Command {
 	private static final int MAXVARCOUNT = 200;
 	private static int[] value = new int[MAXVARCOUNT];
 	
+	public Command() {
+		this.command = "";
+		this.exp = null;
+		this.ans = null;
+	}
+	
 	public Command(String command, Expression exp) {
 		this.command = command;
 		this.exp = exp;
@@ -122,6 +128,42 @@ public class Command {
 		ans.setAnswer(newString);
 	}
 	
+	public Answer getAns() {
+		return ans;
+	}
+
+	public void setAns(Answer ans) {
+		this.ans = ans;
+	}
+
+	/**
+	 * @return the exp
+	 */
+	public Expression getExp() {
+		return exp;
+	}
+
+	/**
+	 * @param exp the exp to set
+	 */
+	public void setExp(Expression exp) {
+		this.exp = exp;
+	}
+
+	/**
+	 * @return the command
+	 */
+	public String getCommand() {
+		return command;
+	}
+
+	/**
+	 * @param command the command to set
+	 */
+	public void setCommand(String command) {
+		this.command = command;
+	}
+
 	public void setCommand(String newCom, Expression newExp) {
 		this.command = newCom;
 		this.exp = newExp;
@@ -157,20 +199,6 @@ public class Command {
 		return str;
 	}
 	
-	/**
-	 * @return the command
-	 */
-	public String getCommand() {
-		return command;
-	}
-
-	/**
-	 * @param command the command to set
-	 */
-	public void setCommand(String command) {
-		this.command = command;
-	}
-
 	public static String derivationSub(final String input, final String x) {
 		String newString = "", str = "";
 		final String[] count = input.split("\\-");
@@ -218,26 +246,5 @@ public class Command {
 		return str;
 	}
 
-	public Answer getAns() {
-		return ans;
-	}
 
-	public void setAns(Answer ans) {
-		this.ans = ans;
-	}
-
-	/**
-	 * @return the exp
-	 */
-	public Expression getExp() {
-		return exp;
-	}
-
-	/**
-	 * @param exp the exp to set
-	 */
-	public void setExp(Expression exp) {
-		this.exp = exp;
-	}
-	
 }

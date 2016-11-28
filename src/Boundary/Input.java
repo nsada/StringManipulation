@@ -8,11 +8,29 @@ package Boundary;
 //
 //
 
-
-
+import java.util.Scanner;
 
 public class Input {
-	public void inCommand() {
+	private String input;
+	final Scanner inSys = new Scanner(System.in);
 	
+	/**
+	 * @return the input
+	 */
+	public String getInput() {
+		return input;
+	}
+
+
+	/**
+	 * @param input the input to set
+	 */
+	public void setInput(String input) {
+		this.input = input;
+	}
+
+
+	public void IN() {
+		this.input = inSys.nextLine();
 	}
 }
