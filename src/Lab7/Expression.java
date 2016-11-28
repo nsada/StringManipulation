@@ -23,8 +23,8 @@ public class Expression {
 	
 	}
 	
-	public void getExpression() {
-	
+	public String getExpression() {
+		return exp;
 	}
 	
 	public void setExpresssion(String newExp) {

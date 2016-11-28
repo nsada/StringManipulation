@@ -14,7 +14,6 @@ public class Simplify {
 	private static final int MAXVARCOUNT = 200;
 	private static int[] value = new int[MAXVARCOUNT];
 	
-	/*new*/
 	public Simplify() {
 		input = "";
 		fun = "";
@@ -27,35 +26,14 @@ public class Simplify {
 	}
 	
 	public String simplify() {
+		OperateString ops = new OperateString();
 		String newString = "";
-		boolean errorDetected = false;
 		final String[] count = input.split(" "); 
 		final int num = count.length;
-		for (int i = 0; i < num; i++) {
-			if (count[i].equals("")) {
-				errorDetected = true; break;
-			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {
-				errorDetected = true; break;
-			} else if (isLetter(count[i].charAt(0))) {
-				String var = getVarStr(count[i], 0);
-				if (var.length() == count[i].length()) {
-					errorDetected =true; break;
-				} else if (isNumber(count[i].charAt(var.length()+1))) {
-					String number = getNumStr(count[i], var.length()+1);
-					if (count[i].length() != var.length() + number.length() + 1) {
-						errorDetected = true; break;
-					}
-				} else if (count[i].charAt(var.length()+1) == '-') {
-					errorDetected = true; break;
-				}
-			}
-		}
-		if (errorDetected) {
-			newString = "error";
-		} else {
+		
 			String[] var = new String[num - 1];
 			for (int i = 1; i < num; i++) {
-				var[i - 1] = getVarStr(count[i], 0);
+				var[i - 1] = ops.getVarStr(count[i], 0);
 				final int len = count[i].length();
 				final String n = count[i].substring(var[i - 1].length() + 1, len);
 				final int v = Integer.parseInt(n);
@@ -64,8 +42,8 @@ public class Simplify {
 	
 			String x = "";
 			for (int i = 0; i < fun.length(); i++) {
-				if (isLetter(fun.charAt(i))) {
-					x = getVarStr(fun, i);
+				if (ops.isLetter(fun.charAt(i))) {
+					x = ops.getVarStr(fun, i);
 					boolean havevalue = false, havesquare = false;
 					for (int j = 0; j < num - 1; j++) {
 						if (x.equals(var[j])) {
@@ -74,7 +52,7 @@ public class Simplify {
 							break;
 						} else if ((i + x.length()) < fun.length() 
 								&& fun.charAt(i + x.length()) == '^') {
-							final String l = getNumStr(fun, i + x.length() + 1);
+							final String l = ops.getNumStr(fun, i + x.length() + 1);
 							i = i + 1 + l.length();
 							newString = newString + x + '^' + l;
 							havesquare = true;
@@ -88,7 +66,6 @@ public class Simplify {
 					newString = newString + fun.charAt(i);
 				}
 			}
-		}
 		// System.out.println(newString);
 		
 		return newString;
