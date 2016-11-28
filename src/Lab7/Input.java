@@ -11,7 +11,7 @@ package Lab7;
 
 
 
-public class InputCommand {
+public class Input {
 	public void inCommand() {
 	
 	}

@@ -10,6 +10,7 @@ public class Command {
 	private String command;
 	private Expression exp;
 	private Answer ans;
+	private static OperateString op = new OperateString();
 
 
 	public boolean judge() {
@@ -27,7 +28,16 @@ public class Command {
 	}
 	
 	public void derivate(Expression exp, String command) {
-	
+		if (!op.isLetter(command.charAt(5))) {
+			System.out.println("Error, wrong command!");
+		}
+		final String variable = op.getVarStr(command, 5);
+		if (5 + variable.length() < command.length()) {
+			System.out.println("Error, wrong command!");
+		}
+		String newString = derivation(exp.getExpression(), variable);
+		
+		ans.setAnswer(newString);
 	}
 	
 	public void setCommand(String newCom, Expression newExp) {
@@ -35,4 +45,80 @@ public class Command {
 		this.exp = newExp;
 	}	
 	
+	public static String derivation(final String input, final String x) {
+		String str = "";
+		if (op.havex(input, x) == 0) {
+			str = "0";
+		} else {
+
+			final String[] count = input.split("\\+");
+			String temp = "";
+
+			for (int i = 0; i < count.length; i++) {
+				int cal = 0;
+				temp = "";
+				cal = op.havex(count[i], x);
+				if (cal != 0) {
+					temp = derivationSub(count[i], x);
+					str = str + '+' + temp;
+					// System.out.print("temp: ");System.out.println(temp);
+				}
+			}
+			if (str.charAt(0) == '+') {
+				str = str.substring(1);
+			}
+			// System.out.println(str);
+			str = op.splitSquare(str);
+			// System.out.println(str);
+			str = op.mergePlus(str);
+		}
+		return str;
+	}
+	
+	public static String derivationSub(final String input, final String x) {
+		String newString = "", str = "";
+		final String[] count = input.split("\\-");
+		if (op.havex(input, x) == 0) {
+			str = "0";
+		} else {
+			// int sum = 0;
+			String temp = "", numstr = "", sub = "";
+			for (int i = 0; i < count.length; i++) {
+				int mul = 1;
+				int cal = 0;
+				temp = "";
+				numstr = "1";
+				newString = "";
+				cal = op.havex(count[i], x);
+				if (cal != 0) {
+					temp = op.mergeMul(count[i]);
+					int k = 0;
+					if (op.isNumber(temp.charAt(0))) {
+						numstr = op.getNumStr(temp, 0);
+						k = numstr.length();
+					}
+					for (int j = k; j < temp.length(); j++) {
+						if (op.isLetter(temp.charAt(j))) {
+							sub = op.getVarStr(temp, j);
+							if (!sub.equals(x)) {
+								newString = newString + '*' + sub;
+							}
+							j = j + sub.length() - 1;
+						}
+					}
+				}
+				mul *= Integer.parseInt(numstr) * cal;
+				newString = mul + newString;
+				for (int j = 0; j < cal - 1; j++) {
+					newString = newString + '*' + x;
+				}
+				newString = op.mergeSquare(newString);
+				str = str + '-' + newString;
+			}
+			str = str.substring(1, str.length());
+			str = op.splitSquare(str);
+			str = op.mergePlus(str);
+		}
+		return str;
+	}
 }
