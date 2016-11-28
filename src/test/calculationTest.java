@@ -9,6 +9,7 @@ import Entity.Command;
 import Entity.Expression;
 
 public class calculationTest {
+	//Black-box---------------------------------------------------------
 	@Test 
 	public void testSimplify() {
 		Expression exp = new Expression("2*x*x+y*y*y+3*z");
@@ -62,7 +63,9 @@ public class calculationTest {
 		testCommand.derivate();
 		assertEquals("0",testCommand.getAns().getAnswer());
 	}
+	//Black-box End--------------------------------------------------------------------
 
+	//White-box-------------------------------------------------------------------------
 	@Test
 	public void testJudgeExpression() {		
 		assertEquals(false,JudgeExpression.judgeExpression("35^3")); //1
@@ -82,5 +85,5 @@ public class calculationTest {
 		assertEquals(false,JudgeExpression.judgeExpression("x+yy^2*7+x*x#"));
 		assertEquals(false,JudgeExpression.judgeExpression("x+yy^2*7+)x*x"));	
 	}
-
+	//White-box End-------------------------------------------------------------------------
 }
