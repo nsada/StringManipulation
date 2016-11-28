@@ -26,9 +26,23 @@ public class Command {
 		final int num = count.length;
 		for (int i = 0; i < num; i++) {
 			if (count[i].equals("")) {
-				errorDetected = true;
+				errorDetected = true; break;
 			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {
-				errorDetected = true;
+				errorDetected = true; break;
+			} else if (op.isLetter(count[i].charAt(0))) {
+				String var = op.getVarStr(count[i], 0);
+				if (var.length() == count[i].length()) {
+					errorDetected =true; break;
+				} else if (var.length()+1 >= count[i].length()) {
+					errorDetected = true; break;
+				} else if (op.isNumber(count[i].charAt(var.length()+1))) {
+					String number = op.getNumStr(count[i], var.length()+1);
+					if (count[i].length() != var.length() + number.length() + 1) {
+						errorDetected = true; break;
+					}
+				} else if (count[i].charAt(var.length()+1) == '-') {
+					errorDetected = true; break;
+				}
 			}
 		}
 		return !errorDetected;

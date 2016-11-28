@@ -10,7 +10,8 @@ import java.util.Scanner;
  */
 public final class calculation {
 
-	public static void main(final String[] args) {		
+	public static void main(final String[] args) {	
+		System.out.println("ha");
 		System.out.println("Please input an expression for operation");		
 		final Scanner inSys = new Scanner(System.in);		
 		
@@ -43,6 +44,8 @@ public final class calculation {
 		if (com.judgeDerivate()) {
 			Derivate dir = new Derivate();
 			dir.derivate(com);			
+		} else {
+			com.getAns().setAnswer("errorDerivate");
 		}
 		return com.getAns();
 	}
@@ -52,6 +55,8 @@ public final class calculation {
 		if (com.judgeSimplify()) {
 			Simplify sim = new Simplify();
 			sim.simplify(com);			
+		} else {
+			com.getAns().setAnswer("errorSimplify");
 		}
 		return com.getAns();
 	}
