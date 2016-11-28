@@ -11,7 +11,7 @@ import java.util.Scanner;
 public final class calculation {
 
 	public static void main(final String[] args) {	
-		System.out.println("ha");
+		//System.out.println("ha");
 		System.out.println("Please input an expression for operation");		
 		final Scanner inSys = new Scanner(System.in);		
 		
