@@ -18,9 +18,12 @@ public class Command {
 	}
 	
 	public void simplify() {
+		String newStr = "error";
 		if (judge()) {
-			Simplify sim = new Simplify(command, exp.getExpression());			
+			Simplify sim = new Simplify(command, exp.getExpression());	
+			newStr = sim.simplify();
 		}
+		ans.setAnswer(newStr);
 	}
 	
 	public void derivate(Expression exp, String command) {
@@ -30,7 +33,6 @@ public class Command {
 	public void setCommand(String newCom, Expression newExp) {
 		this.command = newCom;
 		this.exp = newExp;
-	}
-	
+	}	
 	
 }

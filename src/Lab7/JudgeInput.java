@@ -8,8 +8,12 @@ package Lab7;
 
 public class JudgeInput {
 	public int judgeInput(final String input) {
+		if (input.equals("")) { // If it is a blank string
+			return 3;
+		}		
 		final int 	minLength = 6;
 		int 		inputType;
+
 		if (input.charAt(0) == '!') {
 			if (input.length() < minLength) {
 				inputType = 3; // The command is too short, so error
