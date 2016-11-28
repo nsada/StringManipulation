@@ -12,4 +12,9 @@ package Lab7;
 
 
 public class OutputAnswer{
+	private Answer ans;
+	public OutputAnswer(Answer ans) {
+		Output output = new Output();
+		output.print(ans.getAnswer());
+	}
 }

@@ -55,7 +55,8 @@ public class Expression {
 		}
 		exp = newString;
 	}
-	public static boolean judge(String expression) {
+	public static boolean judge() {
+		String expression = exp;
 		int cntNum = 0, cntSymbol = 0;
 		char currentChar = '*';
 		boolean errorDetected = false;
