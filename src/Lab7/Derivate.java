@@ -7,7 +7,7 @@ package Lab7;
 //  @ Author : 
 
 public class Derivate {
-	public void dirivate(Command com) {
-	
+	public void derivate(Command com) {
+		com.derivate();
 	}
 }

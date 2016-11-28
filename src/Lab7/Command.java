@@ -95,7 +95,7 @@ public class Command {
 		ans.setAnswer(newString);
 	}
 	
-	public void derivate(Expression exp, String command) {
+	public void derivate() {
 		if (!op.isLetter(command.charAt(5))) {
 			System.out.println("Error, wrong command!");
 		}

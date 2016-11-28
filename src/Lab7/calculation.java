@@ -31,18 +31,18 @@ public final class calculation {
 			case 0: // The input is a simplification command
 				ans = inSimplify(s, exp); break;
 			case 1: // The input is a derivation command
-				ans = inDirivate(s, exp); break;
+				ans = inDerivate(s, exp); break;
 			}
 			OutputAnswer outputAns = new OutputAnswer(ans);
 		}
 		
 	}
 
-	private static Answer inDirivate(String s, Expression exp) {
+	private static Answer inDerivate(String s, Expression exp) {
 		Command com = new Command(s, exp);
 		if (com.judgeDerivate()) {
 			Derivate dir = new Derivate();
-			dir.dirivate(com);			
+			dir.derivate(com);			
 		}
 		return com.getAns();
 	}
