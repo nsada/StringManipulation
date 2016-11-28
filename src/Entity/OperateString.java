@@ -1,4 +1,4 @@
-package Lab7;
+package Entity;
 
 public class OperateString {
 	private static final int MAXVARCOUNT = 200;

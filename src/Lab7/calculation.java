@@ -2,6 +2,15 @@ package Lab7;
 
 import java.util.Scanner;
 
+import Control.Derivate;
+import Control.JudgeExpression;
+import Control.JudgeInput;
+import Control.OutputAnswer;
+import Control.Simplify;
+import Entity.Answer;
+import Entity.Command;
+import Entity.Expression;
+
 
 
 
@@ -27,7 +36,7 @@ public final class calculation {
 			case 2: 
 				exp = inExpression(s); 
 				if (exp.equals("error")) ans.setAnswer("errorExp"); 
-				else ans.setAnswer(exp.getExpression());
+				else ans.setAnswer(exp.getExp());
 				break;
 			case 0: // The input is a simplification command
 				ans = inSimplify(s, exp); break;
@@ -64,8 +73,8 @@ public final class calculation {
 	private static Expression inExpression(String s) {
 		Expression exp = new Expression(s);
 		JudgeExpression judgeExp = new JudgeExpression();
-		if (judgeExp.judgeExpression(exp.getExpression()) == false) {
-			exp.setExpresssion("error");
+		if (judgeExp.judgeExpression(exp.getExp()) == false) {
+			exp.setExp("error");
 		} else {
 			exp.splitSquare();
 		}		

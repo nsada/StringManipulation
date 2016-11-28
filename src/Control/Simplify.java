@@ -5,7 +5,9 @@
 //  @ Date : 2016/11/28
 //  @ Author : 
 
-package Lab7;
+package Control;
+
+import Entity.Command;
 
 public class Simplify {
 	
