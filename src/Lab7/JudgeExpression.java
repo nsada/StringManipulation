@@ -9,7 +9,10 @@ package Lab7;
 
 public class JudgeExpression {		
 
-	
+	public boolean judgeExpression(final String fun) {
+		Expression exp = new Expression(fun);
+		return exp.judge();
+	}
 	
 		
 }

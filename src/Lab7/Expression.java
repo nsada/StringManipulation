@@ -55,7 +55,6 @@ public class Expression {
 		}
 		exp = newString;
 	}
-	
 	public static boolean judge(String expression) {
 		int cntNum = 0, cntSymbol = 0;
 		char currentChar = '*';
@@ -119,5 +118,9 @@ public class Expression {
 	
 	public void setExpresssion(String newExp) {
 	
+	}
+	public void splitSquare() {
+		OperateString ops = new OperateString();
+		exp = ops.splitSquare(exp);
 	}
 }
