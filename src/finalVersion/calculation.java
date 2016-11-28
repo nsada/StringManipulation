@@ -186,6 +186,8 @@ public final class calculation {
 				String var = getVarStr(count[i], 0);
 				if (var.length() == count[i].length()) {
 					errorDetected =true; break;
+				} else if (var.length()+1 >= count[i].length()) {
+					errorDetected = true; break;
 				} else if (isNumber(count[i].charAt(var.length()+1))) {
 					String number = getNumStr(count[i], var.length()+1);
 					if (count[i].length() != var.length() + number.length() + 1) {
