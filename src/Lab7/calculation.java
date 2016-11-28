@@ -16,6 +16,7 @@ public final class calculation {
 			String s = inSys.nextLine();
 			JudgeInput judgein = new JudgeInput();
 			final int x = judgein.judgeInput(s);
+			
 			if (x == 3) { // If it is a blank string
 				System.out.println("Error, wrong input!");
 				continue;
@@ -24,9 +25,10 @@ public final class calculation {
 			// System.out.println(s);
 			
 			if (x == 2) { // The input is a expression
-				s = deleteTab(s);
-				s = reMul(s);
-				if (!judgeFun(s)) {
+				Expression exp = new Expression(s);
+				JudgeExpression judgeExp = new JudgeExpression();
+				;
+				if (judgeExp.judgeExpression(exp.getExpression())) {
 					System.out.println("Error, wrong expression!");
 					continue;
 				}

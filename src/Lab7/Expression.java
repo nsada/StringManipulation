@@ -7,14 +7,52 @@ package Lab7;
 //  @ Author : 
 
 public class Expression {
-	private String exp;
+	private static String exp;
 	public Expression() {
 		exp = "";
 	}
 	public Expression(String exp) {
 		this.exp = exp;
+		deleteTab();
+		reMul();
 	}
 	
+	public void deleteTab() {
+		String newString = "";
+		for (int i = 0; i < exp.length(); i++) {
+			if (exp.charAt(i) == ' ' || exp.charAt(i) == '\t') {
+				continue;
+			}
+			newString = newString + exp.charAt(i);
+		}
+		exp = newString;
+	}
+	/**
+	 * To show '*', like "3x" to "3*x".
+	 * 
+	 * @param input
+	 *            string
+	 * @return newString
+	 */
+	public static void reMul() {
+		String newString = "";
+		OperateString ops = new OperateString();
+		for (int i = 0; i < exp.length(); i++) {
+			if (ops.isNumber(exp.charAt(i))) {
+				final String num = ops.getNumStr(exp, i);
+				newString = newString + num;
+				final int len = num.length();
+				if ((i + len) < exp.length() 
+						&& ops.isLetter(exp.charAt(i + len))) {
+					newString = newString + '*';
+				}
+				i = i + len - 1;
+			} else {
+				newString = newString + exp.charAt(i);
+			}
+		}
+		exp = newString;
+	}
 	public void judge(String expression) {
 	
 	}
