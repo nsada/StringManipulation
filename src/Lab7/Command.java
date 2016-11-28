@@ -21,11 +21,20 @@ public class Command {
 	}
 
 	public boolean judgeSimplify() {
-		JudgeCommand jc = new JudgeCommand(command);
-		return jc.judgeCommand();
+		boolean errorDetected = false;
+		final String[] count = command.split(" "); 
+		final int num = count.length;
+		for (int i = 0; i < num; i++) {
+			if (count[i].equals("")) {
+				errorDetected = true;
+			} else if (count[i].charAt(0) == ' ' || count[i].charAt(0) == '=') {
+				errorDetected = true;
+			}
+		}
+		return !errorDetected;
 	}
 	
-	public boolean judgeDerivate(String command) {
+	public boolean judgeDerivate() {
 		if (!op.isLetter(command.charAt(5))) {
 			System.out.println("Error, wrong command!");
 			return false;
@@ -41,48 +50,47 @@ public class Command {
 	public void simplify() {
 		String newString = "error";
 		String fun = exp.getExpression();
-		if (judge()) {
-			OperateString ops = new OperateString();
-			final String[] count = command.split(" "); 
-			final int num = count.length;
-			
-			String[] var = new String[num - 1];
-			for (int i = 1; i < num; i++) {
-				var[i - 1] = ops.getVarStr(count[i], 0);
-				final int len = count[i].length();
-				final String n = count[i].substring(var[i - 1].length() + 1, len);
-				final int v = Integer.parseInt(n);
-				value[i - 1] = v;
-			}
-
-			String x = "";
-			for (int i = 0; i < fun.length(); i++) {
-				if (ops.isLetter(fun.charAt(i))) {
-					x = ops.getVarStr(fun, i);
-					boolean havevalue = false, havesquare = false;
-					for (int j = 0; j < num - 1; j++) {
-						if (x.equals(var[j])) {
-							newString = newString + value[j];
-							havevalue = true;
-							break;
-						} else if ((i + x.length()) < fun.length() 
-								&& fun.charAt(i + x.length()) == '^') {
-							final String l = ops.getNumStr(fun, i + x.length() + 1);
-							i = i + 1 + l.length();
-							newString = newString + x + '^' + l;
-							havesquare = true;
-						}
-					}
-					if (!havevalue && !havesquare) {
-						newString = newString + x;
-					}
-					i = i + x.length() - 1;
-				} else {
-					newString = newString + fun.charAt(i);
-				}
-			}
-			// System.out.println(newString);							
+		OperateString ops = new OperateString();
+		final String[] count = command.split(" "); 
+		final int num = count.length;
+		
+		String[] var = new String[num - 1];
+		for (int i = 1; i < num; i++) {
+			var[i - 1] = ops.getVarStr(count[i], 0);
+			final int len = count[i].length();
+			final String n = count[i].substring(var[i - 1].length() + 1, len);
+			final int v = Integer.parseInt(n);
+			value[i - 1] = v;
 		}
+
+		String x = "";
+		for (int i = 0; i < fun.length(); i++) {
+			if (ops.isLetter(fun.charAt(i))) {
+				x = ops.getVarStr(fun, i);
+				boolean havevalue = false, havesquare = false;
+				for (int j = 0; j < num - 1; j++) {
+					if (x.equals(var[j])) {
+						newString = newString + value[j];
+						havevalue = true;
+						break;
+					} else if ((i + x.length()) < fun.length() 
+							&& fun.charAt(i + x.length()) == '^') {
+						final String l = ops.getNumStr(fun, i + x.length() + 1);
+						i = i + 1 + l.length();
+						newString = newString + x + '^' + l;
+						havesquare = true;
+					}
+				}
+				if (!havevalue && !havesquare) {
+					newString = newString + x;
+				}
+				i = i + x.length() - 1;
+			} else {
+				newString = newString + fun.charAt(i);
+			}
+		}
+		// System.out.println(newString);							
+
 		newString = op.mergePlus(newString);
 		ans.setAnswer(newString);
 	}
