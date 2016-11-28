@@ -6,7 +6,7 @@ package Lab7;
 //  @ Date : 2016/11/28
 //  @ Author : 
 
-public class Dirivate {
+public class Derivate {
 	public void dirivate(Command com) {
 	
 	}

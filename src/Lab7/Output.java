@@ -12,7 +12,7 @@ package Lab7;
 
 
 public class Output {
-	public void print() {
-	
+	public void print(String str) {
+		System.out.println(str);
 	}
 }

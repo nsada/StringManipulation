@@ -30,17 +30,18 @@ public final class calculation {
 				break;
 			case 0: // The input is a simplification command
 				ans = inSimplify(s, exp); break;
-			case 1: // The input is a dirivation command
+			case 1: // The input is a derivation command
 				ans = inDirivate(s, exp); break;
 			}
+			OutputAnswer outputAns = new OutputAnswer(ans);
 		}
 		
 	}
 
 	private static Answer inDirivate(String s, Expression exp) {
 		Command com = new Command(s, exp);
-		if (com.judge()) {
-			Dirivate dir = new Dirivate();
+		if (com.judgeDerivate()) {
+			Derivate dir = new Derivate();
 			dir.dirivate(com);			
 		}
 		return com.getAns();
@@ -48,7 +49,7 @@ public final class calculation {
 
 	private static Answer inSimplify(String s, Expression exp) {
 		Command com = new Command(s, exp);
-		if (com.judge()) {
+		if (com.judgeSimplify()) {
 			Simplify sim = new Simplify();
 			sim.simplify(com);			
 		}
