@@ -13,9 +13,22 @@ public class Command {
 	private static OperateString op = new OperateString();
 
 
-	public boolean judge() {
+	public boolean judgeSimplify() {
 		JudgeCommand jc = new JudgeCommand(command);
 		return jc.judgeCommand();
+	}
+	
+	public boolean judgeDerivate(String command) {
+		if (!op.isLetter(command.charAt(5))) {
+			System.out.println("Error, wrong command!");
+			return false;
+		}
+		final String variable = op.getVarStr(command, 5);
+		if (5 + variable.length() < command.length()) {
+			System.out.println("Error, wrong command!");
+			return false;
+		}
+		return true;
 	}
 	
 	public void simplify() {
