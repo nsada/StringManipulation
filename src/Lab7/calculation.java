@@ -45,7 +45,7 @@ public final class calculation {
 			Derivate dir = new Derivate();
 			dir.derivate(com);			
 		} else {
-			com.getAns().setAnswer("errorDerivate");
+			com.getAns().setAnswer("Error, wrong derivate command!");
 		}
 		return com.getAns();
 	}
@@ -56,7 +56,7 @@ public final class calculation {
 			Simplify sim = new Simplify();
 			sim.simplify(com);			
 		} else {
-			com.getAns().setAnswer("errorSimplify");
+			com.getAns().setAnswer("Error, wrong simplify command!");
 		}
 		return com.getAns();
 	}
