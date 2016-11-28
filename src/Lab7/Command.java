@@ -62,7 +62,7 @@ public class Command {
 	}
 	
 	public void simplify() {
-		String newString = "error";
+		String newString = "";
 		String fun = exp.getExpression();
 		OperateString ops = new OperateString();
 		final String[] count = command.split(" "); 

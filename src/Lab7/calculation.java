@@ -15,7 +15,6 @@ public final class calculation {
 		System.out.println("Please input an expression for operation");		
 		final Scanner inSys = new Scanner(System.in);		
 		
-		String fun = "", newString = "";
 		Expression exp = new Expression();
 		Answer ans;
 		while (true) {
@@ -28,6 +27,7 @@ public final class calculation {
 			case 2: 
 				exp = inExpression(s); 
 				if (exp.equals("error")) ans.setAnswer("errorExp"); 
+				else ans.setAnswer(exp.getExpression());
 				break;
 			case 0: // The input is a simplification command
 				ans = inSimplify(s, exp); break;
