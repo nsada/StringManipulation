@@ -53,6 +53,8 @@ public class Expression {
 		}
 		exp = newString;
 	}
+	
+	
 	public void judge(String expression) {
 	
 	}
@@ -67,5 +69,9 @@ public class Expression {
 	
 	public void setExpresssion(String newExp) {
 	
+	}
+	public void splitSquare() {
+		OperateString ops = new OperateString();
+		exp = ops.splitSquare(exp);
 	}
 }

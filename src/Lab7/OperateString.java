@@ -148,7 +148,7 @@ public class OperateString {
 	 *            string
 	 * @return newString
 	 */
-	public static String mergePlus(final String input) {
+	public static String mergePlus(String input) {
 		final String[] count = input.split("\\+");
 		String temp = "", newString = "";
 		int sum = 0;

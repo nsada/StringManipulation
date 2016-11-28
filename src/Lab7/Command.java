@@ -11,7 +11,14 @@ public class Command {
 	private Expression exp;
 	private Answer ans;
 	private static OperateString op = new OperateString();
-
+	private static final int MAXVARCOUNT = 200;
+	private static int[] value = new int[MAXVARCOUNT];
+	
+	public Command(String command, Expression exp) {
+		this.command = command;
+		this.exp = exp;
+		this.ans = new Answer();
+	}
 
 	public boolean judge() {
 		JudgeCommand jc = new JudgeCommand(command);
@@ -19,12 +26,52 @@ public class Command {
 	}
 	
 	public void simplify() {
-		String newStr = "error";
+		String newString = "error";
+		String fun = exp.getExpression();
 		if (judge()) {
-			Simplify sim = new Simplify(command, exp.getExpression());	
-			newStr = sim.simplify();
+			OperateString ops = new OperateString();
+			final String[] count = command.split(" "); 
+			final int num = count.length;
+			
+			String[] var = new String[num - 1];
+			for (int i = 1; i < num; i++) {
+				var[i - 1] = ops.getVarStr(count[i], 0);
+				final int len = count[i].length();
+				final String n = count[i].substring(var[i - 1].length() + 1, len);
+				final int v = Integer.parseInt(n);
+				value[i - 1] = v;
+			}
+
+			String x = "";
+			for (int i = 0; i < fun.length(); i++) {
+				if (ops.isLetter(fun.charAt(i))) {
+					x = ops.getVarStr(fun, i);
+					boolean havevalue = false, havesquare = false;
+					for (int j = 0; j < num - 1; j++) {
+						if (x.equals(var[j])) {
+							newString = newString + value[j];
+							havevalue = true;
+							break;
+						} else if ((i + x.length()) < fun.length() 
+								&& fun.charAt(i + x.length()) == '^') {
+							final String l = ops.getNumStr(fun, i + x.length() + 1);
+							i = i + 1 + l.length();
+							newString = newString + x + '^' + l;
+							havesquare = true;
+						}
+					}
+					if (!havevalue && !havesquare) {
+						newString = newString + x;
+					}
+					i = i + x.length() - 1;
+				} else {
+					newString = newString + fun.charAt(i);
+				}
+			}
+			// System.out.println(newString);							
 		}
-		ans.setAnswer(newStr);
+		newString = op.mergePlus(newString);
+		ans.setAnswer(newString);
 	}
 	
 	public void derivate(Expression exp, String command) {
@@ -121,4 +168,13 @@ public class Command {
 		}
 		return str;
 	}
+
+	public Answer getAns() {
+		return ans;
+	}
+
+	public void setAns(Answer ans) {
+		this.ans = ans;
+	}
+	
 }

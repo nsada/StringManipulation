@@ -7,7 +7,7 @@ package Lab7;
 //  @ Author : 
 
 public class Dirivate {
-	public void dirivate() {
+	public void dirivate(Command com) {
 	
 	}
 }
